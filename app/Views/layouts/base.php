@@ -18,14 +18,16 @@
 
   <!-- Bonne pratique : rendre le site responsive -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/assets/global.css">
+  <link rel="stylesheet" href="/assets/css/global.css">
 </head>
 
 <body>
   <!-- Menu de navigation global -->
   <nav>
     <a href="/">Accueil</a> |
-    <a href="/articles">Articles</a> |
+    <a href="/memory">Jeu Memory</a> |
+    <a href="/cardmaker">Cardmaker</a> |
+    <a href="/card_show">Voir cartes</a> |
     <a href="/about">About</a>
   </nav>
 

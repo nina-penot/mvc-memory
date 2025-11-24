@@ -1,4 +1,5 @@
 <?php
+
 namespace Core;
 
 /**
@@ -27,6 +28,11 @@ class Router
     public function get(string $path, string $action): void
     {
         $this->routes['GET'][$path] = $action;
+    }
+
+    public function post(string $path, string $action)
+    {
+        $this->routes['POST'][$path] = $action;
     }
 
     /**
@@ -59,5 +65,6 @@ class Router
         // Si aucune route trouvée, on renvoie une erreur 404
         http_response_code(404);
         echo "404 - Page non trouvée";
+        redirect("/");
     }
 }

@@ -36,8 +36,8 @@ class HomeController extends BaseController
         ]);
     }
 
-    public function show()
-    {
-        echo "Bonjour!";
-    }
+    // public function show()
+    // {
+    //     echo "Bonjour!";
+    // }
 }

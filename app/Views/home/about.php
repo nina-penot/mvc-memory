@@ -3,4 +3,4 @@
     <?= htmlspecialchars($title ?? 'Accueil', ENT_QUOTES, 'UTF-8') ?>
 </h1>
 
-<div>Ceci est un mini MVC.</div>
+<div>Ceci est un jeu memory.</div>

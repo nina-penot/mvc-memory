@@ -1,0 +1,74 @@
+<?php
+require_once __DIR__ . "/../vendor/autoload.php";
+require_once __DIR__ . "/../core/Helper.php";
+
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . "/../");
+$dotenv->safeLoad();
+
+// Importation des classes avec namespaces pour éviter les conflits de noms
+
+use Core\Router;
+
+// Initialisation du routeur
+$router = new Router();
+
+$controller_path = "../app/Controllers";
+foreach (scandir_plus($controller_path) as $controller) {
+    $controller = remove_php_ext($controller);
+    foreach (get_class_methods('App\\Controllers\\' . $controller) as $method) {
+        $my_controllers[$controller][] = $method;
+    }
+}
+print_r($my_controllers);
+br();
+
+// $view_ignore = "layouts";
+// $view_path = "../app/Views";
+// foreach (scandir_plus($view_path) as $view_folder) {
+//     if ($view_folder != $view_ignore) {
+//         $my_viewfolders[] = $view_folder;
+//     }
+// }
+// print_r($my_viewfolders);
+// br();
+
+// foreach (scandir_plus($view_path) as $view_folder) {
+//     if ($view_folder != $view_ignore) {
+//         foreach (scandir_plus($view_path . "/" . $view_folder) as $view) {
+//             $my_views[$view_folder][] = remove_php_ext($view);
+//         }
+//     }
+// }
+// print_r($my_views);
+// br();
+
+foreach ($my_controllers as $c => $methods) {
+    foreach ($methods as $m) {
+        echo "/" . $m;
+        br();
+        echo 'App\\Controllers\\' . $c . "@" . $m;
+        br();
+        if ($m == "index") {
+            //Si index, il faut récupérer le nom du dir
+            //Plus simple de prendre seulement le mot allié à "controller"
+            $router->get("/" . controller_to_dirname($c), 'App\\Controllers\\' . $c . "@" . $m);
+        } else {
+            $router->get("/" . $m, 'App\\Controllers\\' . $c . "@" . $m);
+        }
+    }
+}
+
+// Définition des routes de l'application
+// La route "/" pointe vers la méthode "index" du contrôleur HomeController
+// Le "@" réfère à la fonction à l'intérieur du controller (ici la function index())
+// $router->get('/', 'App\\Controllers\\HomeController@index');
+
+// $router->get('/about', 'App\\Controllers\\HomeController@about');
+// La route "/articles" pointe vers la méthode "index" du contrôleur ArticleController
+// $router->get('/memory', 'App\\Controllers\\MemoryController@index');
+// $router->get('/cardmaker', 'App\\Controllers\\MemoryController@cardmaker');
+
+// Exécution du routeur :
+// On analyse l'URI et la méthode HTTP pour appeler le contrôleur et la méthode correspondants
+$router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
