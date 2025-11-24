@@ -107,7 +107,7 @@ class CardsModel
  */
 class Card
 {
-    public $id, $img, $type, $name, $is_revealed = false;
+    public $id, $img, $type, $name, $is_revealed = false, $is_ignored = false;
 
     function __construct($id, $name, $type, $img_link)
     {
@@ -135,7 +135,7 @@ class Card
  */
 class Card_tester
 {
-    public $name, $id, $img, $is_revealed = false;
+    public $name, $id, $img, $is_revealed = false, $is_ignored = false;
 
     public function __construct($name, $id, $img)
     {
@@ -159,8 +159,8 @@ class Card_tester
 
 class Game
 {
-    public $pair_amount, $cards, $total_cards, $revealed_cards, $ignored_cards, $elem_per_row,
-        $board;
+    public $pair_amount, $cards, $total_cards, $revealed_cards, $elem_per_row,
+        $board, $strikes = 0;
 
     function __construct($pair_amount, $cards)
     {
@@ -231,7 +231,7 @@ class Game
     function get_revealed_cards()
     {
         foreach ($this->total_cards as $card) {
-            if ($card->is_revealed == true and !in_array($card, $this->ignored_cards)) {
+            if ($card->is_ignored == false and $card->is_revealed) {
                 $this->revealed_cards[] = $card;
             }
         }
@@ -242,18 +242,22 @@ class Game
         $this->revealed_cards = [];
     }
 
+    /**
+     * Vérifie si il y a une paire révélée, si gagne ou pas
+     */
     function check_pair()
     {
-        if (!empty($this->revealed_cards) and count($this->revealed_cards) % 2 == 0) {
+        $this->get_revealed_cards();
+        if (!empty($this->revealed_cards) and count($this->revealed_cards) == 2) {
             if ($this->revealed_cards[0] == $this->revealed_cards[1]) {
                 //pair get
-                $this->ignored_cards[] = $this->revealed_cards[0];
-                $this->ignored_cards[] = $this->revealed_cards[1];
+                $this->revealed_cards[0]->is_ignored = true;
+                $this->revealed_cards[1]->is_ignored = true;
                 $this->clear_revealed();
             } else {
                 //unreveal cards
                 foreach ($this->total_cards as $card) {
-                    if ($card->is_revealed == true) {
+                    if ($card->is_revealed == true and $card->is_ignored == false) {
                         $card->card_turn();
                     }
                 }
@@ -261,5 +265,10 @@ class Game
                 $this->clear_revealed();
             }
         }
+    }
+
+    function is_game_over()
+    {
+        //if all cards in total revealed, game is over
     }
 }

@@ -46,10 +46,21 @@ class MemoryController extends BaseController
         }
 
         if (isset($_POST["card"])) {
+            //serialize block start
             $_SESSION["board"] = unserialize($_SESSION["board"]);
+            //--------
+
             $_SESSION["board"]->total_cards[$_POST["card"]]->card_turn();
             print_r($_SESSION["board"]->total_cards[$_POST["card"]]);
+            $_SESSION["board"]->check_pair();
+            $_SESSION["board"]->clear_revealed();
+            if ($_SESSION["board"]->is_game_over) {
+                echo "GAME DONE!! your score = " . $_SESSION["board"]->score;
+            }
+
+            //-----
             $_SESSION["board"] = serialize($_SESSION["board"]);
+            //serialize block end
 
             redirect("/memory#card_" . $_POST["card"]);
             echo $_POST["card"];

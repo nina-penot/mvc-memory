@@ -14,38 +14,66 @@
 //- game end: record final score (less is better), win message with score, 
 //button "start another game"
 
-print_r($board->total_cards);
+print_r($board->revealed_cards);
 
 ?>
 
 <form method="post" style="display: block;">
 
-  <?php foreach ($board->board as $row_key => $row_val) { ?>
-    <div style="margin-bottom: 10px;" class="float_left gap_small">
-      <?php foreach ($row_val as $card_key => $card_val) { ?>
+  <div>
 
-        <?php if ($card_val->is_revealed != true) { ?>
+    <?php foreach ($board->board as $row_key => $row_val) { ?>
+      <div style="margin-bottom: 10px;" class="float_left gap_small">
+        <?php foreach ($row_val as $card_key => $card_val) { ?>
 
-          <button type="submit" name="card" id="card_<?= $card_key ?>" value="<?= $card_key ?>" class="card_main card_front center gradient_<?= $card_val->type ?>">
-            <div class="card_content center">
-              <img class="img_size" src="<?= $card_val->img ?>" alt="<?= $card_val->name ?>">
-            </div>
-            <div class="card_name"><?= $card_val->name ?></div>
-          </button>
+          <?php if ($card_val->is_revealed == true) { ?>
 
-        <?php } else { ?>
-          <button type="submit" name="card" id="card_<?= $card_key ?>" value="<?= $card_key ?>">
-            <div class="card_back center">
-              <div class="card_back_inside center">
-                <img class="card_border" src="../../../assets/images/pokeball.png" alt="">
+            <?php if (!empty($board->ignored_cards)) { ?>
+              <?php if (!in_array($card_val, $board->ignored_cards)) { ?>
+
+                <button type="submit" name="card" id="card_<?= $card_key ?>" value="<?= $card_key ?>" class="card_main card_front center gradient_<?= $card_val->type ?>">
+                  <div class="card_content center">
+                    <img class="img_size" src="<?= $card_val->img ?>" alt="<?= $card_val->name ?>">
+                  </div>
+                  <div class="card_name"><?= $card_val->name ?></div>
+                </button>
+
+              <?php } else { ?>
+
+                <div id="card_<?= $card_key ?>" value="<?= $card_key ?>" class="card_main card_front center gradient_<?= $card_val->type ?>">
+                  <div class="card_content center">
+                    <img class="img_size" src="<?= $card_val->img ?>" alt="<?= $card_val->name ?>">
+                  </div>
+                  <div class="card_name"><?= $card_val->name ?></div>
+                </div>
+
+              <?php } ?>
+
+            <?php } else { ?>
+
+              <button type="submit" name="card" id="card_<?= $card_key ?>" value="<?= $card_key ?>" class="card_main card_front center gradient_<?= $card_val->type ?>">
+                <div class="card_content center">
+                  <img class="img_size" src="<?= $card_val->img ?>" alt="<?= $card_val->name ?>">
+                </div>
+                <div class="card_name"><?= $card_val->name ?></div>
+              </button>
+
+            <?php } ?>
+
+          <?php } else { ?>
+            <button type="submit" name="card" id="card_<?= $card_key ?>" value="<?= $card_key ?>">
+              <div class="card_back center">
+                <div class="card_back_inside center">
+                  <img class="card_border" src="../../../assets/images/pokeball.png" alt="">
+                </div>
               </div>
-            </div>
-          </button>
-        <?php } ?>
+            </button>
+          <?php } ?>
 
-      <?php } ?>
-    </div>
-  <?php } ?>
+        <?php } ?>
+      </div>
+    <?php } ?>
+  </div>
 
   <div style="display: inline-block;">
     <div>KILL BUTTON</div>
