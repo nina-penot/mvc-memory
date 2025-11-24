@@ -11,9 +11,10 @@
 //they are
 //- prevent turning other cards when two cards are revealed and the pair not checked yet
 //- revealed cards cannot be interacted with anymore
-//- game end: record final score (less is better), win message, button start another game
+//- game end: record final score (less is better), win message with score, 
+//button "start another game"
 
-print_r(get_class_methods($board->total_cards[0]));
+print_r($board->total_cards);
 
 ?>
 
@@ -25,17 +26,15 @@ print_r(get_class_methods($board->total_cards[0]));
 
         <?php if ($card_val->is_revealed != true) { ?>
 
-          <button type="submit" name="card" value="<?= $card_key ?>">
-            <div class="card_main card_front center gradient_<?= $card_val->type ?>">
-              <div class="card_content center">
-                <img class="img_size" src="<?= $card_val->img ?>" alt="<?= $card_val->name ?>">
-              </div>
-              <div class="card_name"><?= $card_val->name ?></div>
+          <button type="submit" name="card" id="card_<?= $card_key ?>" value="<?= $card_key ?>" class="card_main card_front center gradient_<?= $card_val->type ?>">
+            <div class="card_content center">
+              <img class="img_size" src="<?= $card_val->img ?>" alt="<?= $card_val->name ?>">
             </div>
+            <div class="card_name"><?= $card_val->name ?></div>
           </button>
 
         <?php } else { ?>
-          <button type="submit" name="card" value="<?= $card_key ?>">
+          <button type="submit" name="card" id="card_<?= $card_key ?>" value="<?= $card_key ?>">
             <div class="card_back center">
               <div class="card_back_inside center">
                 <img class="card_border" src="../../../assets/images/pokeball.png" alt="">

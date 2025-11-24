@@ -51,6 +51,7 @@ class MemoryController extends BaseController
             print_r($_SESSION["board"]->total_cards[$_POST["card"]]);
             $_SESSION["board"] = serialize($_SESSION["board"]);
 
+            redirect("/memory#card_" . $_POST["card"]);
             echo $_POST["card"];
         }
 
