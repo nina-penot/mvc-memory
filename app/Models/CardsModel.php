@@ -178,7 +178,7 @@ class Card
 class Game
 {
     public $pair_amount, $cards, $total_cards, $revealed_cards = [], $elem_per_row,
-        $board, $strikes = 0, $is_waiting = false;
+        $board, $strikes = 0, $is_waiting = false, $winning = false;
 
     function __construct($pair_amount, $cards)
     {
@@ -267,9 +267,13 @@ class Game
     function check_pair()
     {
         $this->get_revealed_cards();
+        if (count($this->revealed_cards) == 1) {
+            $this->winning = false;
+        }
         if (!empty($this->revealed_cards) and count($this->revealed_cards) == 2) {
             if ($this->revealed_cards[0] == $this->revealed_cards[1]) {
                 //pair get
+                $this->winning = true;
                 $this->strikes++;
                 $this->revealed_cards[0]->is_ignored = true;
                 $this->revealed_cards[1]->is_ignored = true;

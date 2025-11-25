@@ -1,73 +1,102 @@
-<form method="post" class="game_board float_left">
+<!-- Block démarrage du jeu -->
+<?php if ($game_state == "start" and !isset($board)) { ?>
 
-  <div class="game_board_cards">
+  <form method="post">
+    <div>Sélectionnez une difficulté.</div>
+    <select name="difficulty">
+      <?php for ($n = 3; $n < 18; $n++) {
+        if ($n == 3) {
+          //easy
+      ?>
+          <optgroup label="Facile">
+          <?php
+        }
+        if ($n == 6) {
+          //medium
+          ?>
+          </optgroup>
+          <optgroup label="Moyen">
+          <?php
+        }
+        if ($n == 10) {
+          //hard
+          ?>
+          </optgroup>
+          <optgroup label="Difficile">
+          <?php
+        }
+        if ($n == 14) {
+          //very hard
+          ?>
+          </optgroup>
+          <optgroup label="EXTREME">
+          <?php
+        }
+          ?>
+          <option value="<?= $n ?>"><?= $n ?> paires (ou <?= $n * 2 ?> cartes)</option>
+        <?php
+      }
+        ?>
+    </select>
 
-    <?php
-    if (!$board->is_waiting) {
-      generate_game_board($board->board);
-    } else {
-      generate_waiting_game($board->board);
-    }
-    ?>
+    <button type="submit" name="start_game">START</button>
+  </form>
 
-  </div>
+<?php } ?>
 
+<!-- Block jeu -->
+<?php if ($game_state == "playing") { ?>
 
-  <div class="game_interface">
+  <form method="post" class="game_board float_left">
 
-    <div style="display: inline-block;">
-      <div>KILL BUTTON</div>
-      <button type="submit" name="kill">KILL</button>
+    <div class="game_board_cards">
+
+      <?php
+      if (!$board->is_waiting) {
+        generate_game_board($board->board);
+      } else {
+        generate_waiting_game($board->board);
+      }
+      ?>
+
     </div>
 
-    <?php
-    if ($board->is_waiting) {
-      show_next_turn();
-    }
-    ?>
-  </div>
 
-</form>
+    <div class="game_interface">
 
-<?php
+      <div class="interface_follow">
+        <div>Coups : <?= $board->strikes ?></div>
 
-//Memory game: notes
+        <div style="display: inline-block;">
+          <div>Restart :</div>
+          <button type="submit" name="kill">RESTART</button>
+        </div>
 
-//Steps:
-//- First form : Choose amount of pairs ($n in range = 3, 12)
-//- hide previous form, show cards, all unrevealed (pick $n amount of cards at rand, then $n * 2)
-//- game loop
-//- record every turn passed (every time 2 cards are revealed)
-//- every pair revealed, show button "next turn", hides pairs if not identical, keeps them if
-//they are
-//- prevent turning other cards when two cards are revealed and the pair not checked yet
-//- revealed cards cannot be interacted with anymore
-//- game end: record final score (less is better), win message with score, 
-//button "start another game"
+        <?php
+        if ($board->is_waiting) {
+          show_next_turn();
+        }
+        if ($board->winning) {
+          show_win_message();
+        }
+        ?>
+      </div>
+    </div>
 
-print_r($_POST);
-br();
-$g_o = $board->is_game_over() ? "yes" : "no";
-echo "game over? ", $g_o;
-br();
-echo "strikes : ", $board->strikes;
-br();
-$waiting = $board->is_waiting ? "yes" : "no";
-echo "game waiting? ", $waiting;
-br();
-echo "cards revealed : ", count($board->revealed_cards);
-br();
-print_r($board->total_cards);
+  </form>
 
-?>
+<?php } ?>
 
-<form method="post" style="display: block;">
+<!-- Block fin de jeu -->
+<?php if ($game_state == "over") { ?>
 
-  <?php
-  if (!$board->is_waiting) {
-    generate_game_board($board->board);
-  } else {
-    generate_waiting_game($board->board);
-    show_next_turn();
-  }
-  ?>
+  <form method="post">
+
+    <div>Vous avez fini !</div>
+    <div>Votre score :</div>
+    <div>Jeu de (insert pair here) en <?= $board->strikes ?> coups, en (insert time here)</div>
+    <button type="submit" name="play_again">REJOUER</button>
+
+  </form>
+
+<?php } ?>

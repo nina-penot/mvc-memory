@@ -120,13 +120,21 @@ function is_string_allowed($str)
 }
 
 /**
+ * Créé un anchor pour la redirection
+ */
+function generate_anchor($val)
+{ ?>
+    <div class="anchor" id="anchor_<?= $val ?>"></div>
+<?php }
+
+/**
  * Génère une carte qui est un bouton
  */
 function make_clickable_card($card_key, $card_val)
 { ?>
 
     <button type="submit" name="card" id="card_<?= $card_key ?>" value="<?= $card_key ?>" class="button_killer">
-        <div class="card_main card_front center gradient_<?= $card_val->type ?>">
+        <div class="card_main_active card_front center gradient_<?= $card_val->type ?>">
             <div class="card_content center">
                 <img class="img_size" src="<?= $card_val->img ?>" alt="<?= $card_val->name ?>">
             </div>
@@ -143,7 +151,8 @@ function make_clickable_card_back($card_key)
 { ?>
 
     <button class="button_killer" type="submit" name="card" id="card_<?= $card_key ?>" value="<?= $card_key ?>">
-        <div class="card_back center">
+        <?php generate_anchor($card_key) ?>
+        <div class="card_back_active center">
             <div class="card_back_inside center">
                 <img class="card_border card_back_img" src="../../../assets/images/pokeball.png" alt="">
             </div>
@@ -159,6 +168,7 @@ function make_ignored_card_back($card_key)
 { ?>
 
     <div id="card_<?= $card_key ?>" value="<?= $card_key ?>" class="card_back center">
+        <?php generate_anchor($card_key) ?>
         <div class="card_back_inside center">
             <img class="card_border card_back_img" src="../../../assets/images/pokeball.png" alt="">
         </div>
@@ -173,6 +183,7 @@ function make_ignored_card($card_key, $card_val)
 { ?>
 
     <div id="card_<?= $card_key ?>" class="card_main card_front center gradient_<?= $card_val->type ?>">
+        <?php generate_anchor($card_key) ?>
         <div class="card_content center">
             <img class="img_size" src="<?= $card_val->img ?>" alt="<?= $card_val->name ?>">
         </div>
@@ -204,11 +215,6 @@ function generate_game_board($board)
                 } elseif ($card_val->is_ignored == false or $card_val->is_waiting == false) {
                     make_clickable_card($card_key, $card_val);
                 }
-                // if ($card_val->is_ignored == false or $card_val->is_waiting == false) {
-                //     make_clickable_card($card_key, $card_val);
-                // } elseif ($card_val->is_ignored == true or $card_val->is_waiting == true) {
-                //     make_ignored_card($card_key, $card_val);
-                // }
             } else {
                 make_clickable_card_back($card_key);
             }
@@ -239,7 +245,15 @@ function show_next_turn()
 { ?>
 
     <div>
+        <div>Shame, try again.</div>
         <button type="submit" name="next_turn">NEXT TURN</button>
     </div>
+
+<?php }
+
+function show_win_message()
+{ ?>
+
+    <div>Good job, keept it up!</div>
 
 <?php }

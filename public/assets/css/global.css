@@ -1,5 +1,5 @@
 :root {
-    --card_shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.5);
+    --card_shadow: 0.5vw 0.5vw 1vw 0px rgba(0, 0, 0, 0.5);
     --card_height: 20vw;
     --card_width: calc(var(--card_height)/1.4);
     --card_circle: calc(var(--card_height)/1.75);
@@ -63,12 +63,12 @@ main {
 }
 
 .gap_small {
-    gap: 10px;
+    gap: 0.8vw;
 }
 
 .anchor {
     position: absolute;
-    top: -1vw;
+    top: -10vw;
     visibility: hidden;
 }
 
@@ -81,21 +81,31 @@ main {
     clear: both;
     background-color: #000000;
     width: var(--board_width);
-    height: var(--board_height);
-    align-items: center;
+    /* height: var(--board_height); */
+    /* align-items: center; */
     justify-content: center;
 }
 
 .game_interface {
+    /* justify-self: flex-start; */
     background-color: yellow;
     width: calc(var(--board_width) / 6 - 1vw);
-    height: calc(var(--board_height) - 2vw);
+    /* height: calc(var(--board_height) - 2vw); */
+    height: inherit;
+    margin: 1vw 0 1vw 0;
+}
+
+.interface_follow {
+    margin: 1vw 0 0 0;
+    position: sticky;
+    top: 1vw;
 }
 
 .game_board_cards {
+    margin: 1vw 0 1vw 0;
     background-color: green;
     width: calc(var(--board_width) - var(--board_width) / 6 - 1vw);
-    height: calc(var(--board_height) - 2vw);
+    /* height: calc(var(--board_height) - 2vw); */
     display: flex;
     flex-direction: column;
     justify-content: safe center;
@@ -182,28 +192,36 @@ main {
 /* Card main */
 
 .card_main {
-    border-radius: 15px;
+    border-radius: 0.8vw;
     height: var(--card_height);
     width: var(--card_width);
     overflow: hidden;
 }
 
-.card_main:hover {
+.card_main_active {
+    border-radius: 0.8vw;
+    height: var(--card_height);
+    width: var(--card_width);
+    overflow: hidden;
+}
+
+.card_main_active:hover {
     transform: scale(101%);
 }
 
 .card_front {
     background-color: #000000;
-    box-shadow: inset 0px 0px 0px 2px #000000, inset 0px 0px 0px 9px #ffffff,
-        inset 0px 0px 0px 10px #000000, var(--card_shadow);
+    box-shadow: inset 0px 0px 0px 0.2vw #000000, inset 0px 0px 0px 0.6vw #ffffff,
+        inset 0px 0px 0px 0.7vw #000000, var(--card_shadow);
     position: relative;
 }
 
 .card_name {
     position: absolute;
-    bottom: 30px;
+    bottom: 10%;
     color: black;
-    -webkit-text-stroke: 3px rgb(255, 255, 255);
+    font-size: 1.5vw;
+    -webkit-text-stroke: 0.3vw rgb(255, 255, 255);
     paint-order: stroke fill;
 }
 
@@ -221,7 +239,7 @@ main {
 }
 
 .img_size {
-    width: calc(var(--card_width) - 11px);
+    width: calc(var(--card_width) - 1.1vw);
 }
 
 /* Card back */
@@ -250,6 +268,14 @@ main {
     height: calc(var(--card_height) * 1.5);
 }
 
-.card_back:hover {
+.card_back_active {
+    border-radius: 15px;
+    background-color: #3e040a;
+    height: var(--card_height);
+    width: var(--card_width);
+    overflow: hidden;
+}
+
+.card_back_active:hover {
     transform: scale(101%);
 }

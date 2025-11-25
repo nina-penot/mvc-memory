@@ -35,15 +35,35 @@ class MemoryController extends BaseController
             $card_objs[] = new Card($card["id"], $card["name"], $types[$card["type_id"]], $card["image"]);
         }
 
+        //game start (open page)
+        if (!isset($_SESSION["board"])) {
+            //show start menu
+            $game_state = "start";
+        }
+
+        //game on (playing)
+        if (isset($_POST["start_game"])) {
+            $board = new Game($_POST["difficulty"], $card_objs);
+            $_SESSION["board"] = serialize($board);
+            $game_state = "playing";
+            $data['board'] = unserialize($_SESSION["board"]);
+        }
+
+        //game over (game end menu)
+        if (isset($_SESSION["board"]) and $_SESSION["board"]->is_game_over()) {
+            $game_state = "over";
+        }
+
+        //old code
+
         if (isset($_POST["kill"])) {
             if (isset($_SESSION["board"])) unset($_SESSION["board"]);
         }
 
-        if (!isset($_SESSION["board"])) {
-            $board = new Game(6, $card_objs);
-            $_SESSION["board"] = serialize($board);
-            // $_SESSION["board"] = $board;
-        }
+        // if (!isset($_SESSION["board"])) {
+        //     $board = new Game(6, $card_objs);
+        //     $_SESSION["board"] = serialize($board);
+        // }
 
         if (isset($_POST["next_turn"])) {
             //serialize block start
@@ -76,7 +96,7 @@ class MemoryController extends BaseController
             $_SESSION["board"] = serialize($_SESSION["board"]);
             //serialize block end
 
-            redirect("/memory#anchor");
+            redirect("/memory#anchor_" . $_POST["card"]);
             echo $_POST["card"];
         }
 
@@ -85,10 +105,10 @@ class MemoryController extends BaseController
         }
 
         $data = [
+            'game_state' => $game_state,
             'title' => "Mes cartes",
             "cards" => $cards,
             "card_objs" => $card_objs,
-            'board' => unserialize($_SESSION["board"])
         ];
 
         $this->render('memory/index', $data);
