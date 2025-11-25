@@ -1,3 +1,34 @@
+<form method="post" class="game_board float_left">
+
+  <div class="game_board_cards">
+
+    <?php
+    if (!$board->is_waiting) {
+      generate_game_board($board->board);
+    } else {
+      generate_waiting_game($board->board);
+    }
+    ?>
+
+  </div>
+
+
+  <div class="game_interface">
+
+    <div style="display: inline-block;">
+      <div>KILL BUTTON</div>
+      <button type="submit" name="kill">KILL</button>
+    </div>
+
+    <?php
+    if ($board->is_waiting) {
+      show_next_turn();
+    }
+    ?>
+  </div>
+
+</form>
+
 <?php
 
 //Memory game: notes
@@ -28,9 +59,6 @@ echo "cards revealed : ", count($board->revealed_cards);
 br();
 print_r($board->total_cards);
 
-// echo "total cards : ";
-// print_r($board->total_cards);
-
 ?>
 
 <form method="post" style="display: block;">
@@ -43,34 +71,3 @@ print_r($board->total_cards);
     show_next_turn();
   }
   ?>
-
-  <div style="display: inline-block;">
-    <div>KILL BUTTON</div>
-    <button type="submit" name="kill">KILL</button>
-  </div>
-</form>
-
-
-<div class="float_left gap_small">
-
-  <div class="card_main card_front gradient_normal card_shadow center">
-    <div class="card_content center">
-      <img class="img_size" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/143.png" alt="">
-    </div>
-    <div class="card_name">RONFLEX</div>
-  </div>
-
-  <div class="card_main card_front gradient_dragon center">
-    <div class="card_content center">
-      <img class="img_size" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/384.png" alt="">
-    </div>
-    <div class="card_name">RAYQUAZA</div>
-  </div>
-
-  <div class="card_back center">
-    <div class="card_back_inside center">
-      <img class="card_border card_back_img" src="../../../assets/images/pokeball.png" alt="">
-    </div>
-  </div>
-
-</div>

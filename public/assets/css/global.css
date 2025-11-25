@@ -1,8 +1,11 @@
 :root {
     --card_shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.5);
-    --card_height: 250px;
+    --card_height: 20vw;
     --card_width: calc(var(--card_height)/1.4);
     --card_circle: calc(var(--card_height)/1.75);
+    --main_padding: 20px;
+    --board_width: calc(100vw - var(--main_padding) * 2);
+    --board_height: calc(100vh - var(--main_padding));
 }
 
 /* button {
@@ -23,6 +26,7 @@
     font: inherit;
     cursor: pointer;
     outline: inherit;
+    position: relative;
 }
 
 body {
@@ -43,7 +47,7 @@ nav a {
 }
 
 main {
-    padding: 20px;
+    padding: var(--main_padding);
 }
 
 .float_left {
@@ -51,15 +55,51 @@ main {
     float: left;
 }
 
+.super_flex {
+    display: flex;
+    float: left;
+    gap: 0.8vw;
+    margin: 0.5vw auto 0.5vw auto;
+}
+
 .gap_small {
     gap: 10px;
 }
 
 .anchor {
-    position: relative;
-    top: -150px;
+    position: absolute;
+    top: -1vw;
     visibility: hidden;
-    gap: none;
+}
+
+/* ---------------------------------------------------------------------------- */
+/* GAME BOARD */
+/* ---------------------------------------------------------------------------- */
+
+.game_board {
+    position: relative;
+    clear: both;
+    background-color: #000000;
+    width: var(--board_width);
+    height: var(--board_height);
+    align-items: center;
+    justify-content: center;
+}
+
+.game_interface {
+    background-color: yellow;
+    width: calc(var(--board_width) / 6 - 1vw);
+    height: calc(var(--board_height) - 2vw);
+}
+
+.game_board_cards {
+    background-color: green;
+    width: calc(var(--board_width) - var(--board_width) / 6 - 1vw);
+    height: calc(var(--board_height) - 2vw);
+    display: flex;
+    flex-direction: column;
+    justify-content: safe center;
+    overflow: scroll;
 }
 
 /* ---------------------------------------------------------------------------- */

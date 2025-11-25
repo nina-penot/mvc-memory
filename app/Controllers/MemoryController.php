@@ -40,7 +40,7 @@ class MemoryController extends BaseController
         }
 
         if (!isset($_SESSION["board"])) {
-            $board = new Game(10, $card_objs);
+            $board = new Game(6, $card_objs);
             $_SESSION["board"] = serialize($board);
             // $_SESSION["board"] = $board;
         }
@@ -76,7 +76,7 @@ class MemoryController extends BaseController
             $_SESSION["board"] = serialize($_SESSION["board"]);
             //serialize block end
 
-            redirect("/memory#card_" . $_POST["card"]);
+            redirect("/memory#anchor");
             echo $_POST["card"];
         }
 

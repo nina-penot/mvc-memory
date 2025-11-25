@@ -183,7 +183,7 @@ function make_ignored_card($card_key, $card_val)
 
 function float_block_start()
 { ?>
-    <div style="margin-bottom: 10px;" class="float_left gap_small">
+    <div class="super_flex">
 
     <?php }
 
