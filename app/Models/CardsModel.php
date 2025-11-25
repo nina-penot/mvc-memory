@@ -101,36 +101,6 @@ class CardsModel
 }
 
 /**
- * Classe Card
- * --
- * Construit une carte
- */
-class Card
-{
-    public $id, $img, $type, $name, $is_revealed = false, $is_ignored = false;
-
-    function __construct($id, $name, $type, $img_link)
-    {
-        $this->name = $name;
-        $this->type = $type;
-        $this->img = $img_link;
-        $this->id = $id;
-    }
-
-    /**
-     * Retourne une carte
-     */
-    function card_turn()
-    {
-        if ($this->is_revealed == false) {
-            $this->is_revealed = true;
-        } else {
-            $this->is_revealed = false;
-        }
-    }
-}
-
-/**
  * A smaller variant for the Card class for testing purposes
  */
 class Card_tester
@@ -157,10 +127,58 @@ class Card_tester
     }
 }
 
+/**
+ * Classe Card
+ * --
+ * Construit une carte
+ */
+class Card
+{
+    public $id, $img, $type, $name, $is_revealed = false, $is_ignored = false,
+        $is_waiting = false;
+
+    function __construct($id, $name, $type, $img_link)
+    {
+        $this->name = $name;
+        $this->type = $type;
+        $this->img = $img_link;
+        $this->id = $id;
+    }
+
+    /**
+     * Retourne une carte
+     */
+    function card_turn()
+    {
+        if ($this->is_revealed == false) {
+            $this->is_revealed = true;
+        } else {
+            $this->is_revealed = false;
+        }
+    }
+
+    /**
+     * Fait attendre une carte
+     */
+    function wait()
+    {
+        $this->is_waiting = true;
+    }
+
+    /**
+     * Fait cesser d'attendre une carte
+     */
+    function stop_wait()
+    {
+        $this->is_waiting = false;
+    }
+}
+
+
 class Game
 {
-    public $pair_amount, $cards, $total_cards, $revealed_cards, $elem_per_row,
-        $board, $strikes = 0;
+    public $pair_amount, $cards, $total_cards, $revealed_cards = [], $elem_per_row,
+        $board, $strikes = 0, $is_waiting = false;
 
     function __construct($pair_amount, $cards)
     {
@@ -232,9 +250,10 @@ class Game
     {
         foreach ($this->total_cards as $card) {
             if ($card->is_ignored == false and $card->is_revealed == true) {
-                $this->revealed_cards[] = $card;
+                $revealed[] = $card;
             }
         }
+        $this->revealed_cards = $revealed;
     }
 
     function clear_revealed()
@@ -259,18 +278,66 @@ class Game
                 //needs to not do that and wait for an input 'next turn' instead
                 //unreveal cards
                 $this->strikes++;
-                foreach ($this->total_cards as $card) {
-                    if ($card->is_revealed == true and $card->is_ignored == false) {
-                        $card->card_turn();
-                    }
-                }
-                //clear revealed list
-                $this->clear_revealed();
+                $this->board_wait();
             }
         }
     }
 
-    function wait_next_turn() {}
+    function board_wait()
+    {
+        $this->is_waiting = true;
+    }
+
+    function board_stop_waiting()
+    {
+        $this->is_waiting = false;
+    }
+
+    /**
+     * Make a single card wait
+     */
+    function single_wait_next_turn($card)
+    {
+        $card->wait();
+    }
+
+    /**
+     * Make every cards wait
+     */
+    function all_wait_next_turn()
+    {
+        //Make all cards unclickable (outside of ignored)
+        foreach ($this->total_cards as $card) {
+            $card->wait();
+        }
+        //keep showing past cards revealed
+    }
+
+    /**
+     * Makes every card stop waiting
+     */
+    function all_stop_waiting()
+    {
+        foreach ($this->total_cards as $card) {
+            $card->stop_wait();
+        }
+    }
+
+    /**
+     * Go to next turn
+     */
+    function next_turn()
+    {
+        $this->board_stop_waiting();
+        $this->all_stop_waiting();
+        foreach ($this->total_cards as $card) {
+            if ($card->is_revealed == true and $card->is_ignored == false) {
+                $card->card_turn();
+            }
+        }
+        //clear revealed list
+        $this->clear_revealed();
+    }
 
     function is_game_over()
     {

@@ -45,17 +45,31 @@ class MemoryController extends BaseController
             // $_SESSION["board"] = $board;
         }
 
+        if (isset($_POST["next_turn"])) {
+            //serialize block start
+            $_SESSION["board"] = unserialize($_SESSION["board"]);
+            //--------
+
+            $_SESSION["board"]->next_turn();
+
+            //-----
+            $_SESSION["board"] = serialize($_SESSION["board"]);
+            //serialize block end
+        }
+
         if (isset($_POST["card"])) {
             //serialize block start
             $_SESSION["board"] = unserialize($_SESSION["board"]);
             //--------
 
             $_SESSION["board"]->total_cards[$_POST["card"]]->card_turn();
-            print_r($_SESSION["board"]->total_cards[$_POST["card"]]);
+            $_SESSION["board"]->total_cards[$_POST["card"]]->wait();
+
             $_SESSION["board"]->check_pair();
-            $_SESSION["board"]->clear_revealed();
+
+            // $_SESSION["board"]->clear_revealed();
             if ($_SESSION["board"]->is_game_over) {
-                echo "GAME DONE!! your score = " . $_SESSION["board"]->score;
+                $score = "GAME DONE!! your score = " . $_SESSION["board"]->score;
             }
 
             //-----
@@ -66,6 +80,9 @@ class MemoryController extends BaseController
             echo $_POST["card"];
         }
 
+        if (isset($score)) {
+            $data['score'] = $score;
+        }
 
         $data = [
             'title' => "Mes cartes",
@@ -91,7 +108,7 @@ class MemoryController extends BaseController
         }
 
         $my_cards = $cards->all();
-        $row_amount = 4;
+        $row_amount = 6;
         $count = 1;
         $rows = [];
         for ($n = 0; isset($my_cards[$n]); $n += $row_amount) {

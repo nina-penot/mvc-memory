@@ -14,61 +14,35 @@
 //- game end: record final score (less is better), win message with score, 
 //button "start another game"
 
+print_r($_POST);
+br();
 $g_o = $board->is_game_over() ? "yes" : "no";
 echo "game over? ", $g_o;
 br();
-
-echo "total cards : ";
+echo "strikes : ", $board->strikes;
+br();
+$waiting = $board->is_waiting ? "yes" : "no";
+echo "game waiting? ", $waiting;
+br();
+echo "cards revealed : ", count($board->revealed_cards);
+br();
 print_r($board->total_cards);
+
+// echo "total cards : ";
+// print_r($board->total_cards);
 
 ?>
 
 <form method="post" style="display: block;">
 
-  <div>
-
-    <?php foreach ($board->board as $row_key => $row_val) { ?>
-      <div style="margin-bottom: 10px;" class="float_left gap_small">
-        <?php foreach ($row_val as $card_key => $card_val) { ?>
-
-          <?php if ($card_val->is_revealed == true) { ?>
-
-            <?php if (!$card_val->is_ignored) { ?>
-
-              <button type="submit" name="card" id="card_<?= $card_key ?>" value="<?= $card_key ?>" class="button_killer">
-                <div class="card_main card_front center gradient_<?= $card_val->type ?>">
-                  <div class="card_content center">
-                    <img class="img_size" src="<?= $card_val->img ?>" alt="<?= $card_val->name ?>">
-                  </div>
-                  <div class="card_name"><?= $card_val->name ?></div>
-                </div>
-              </button>
-
-            <?php } else { ?>
-
-              <div id="card_<?= $card_key ?>" value="<?= $card_key ?>" class="card_main card_front center gradient_<?= $card_val->type ?>">
-                <div class="card_content center">
-                  <img class="img_size" src="<?= $card_val->img ?>" alt="<?= $card_val->name ?>">
-                </div>
-                <div class="card_name"><?= $card_val->name ?></div>
-              </div>
-
-            <?php } ?>
-
-          <?php } else { ?>
-            <button class="button_killer" type="submit" name="card" id="card_<?= $card_key ?>" value="<?= $card_key ?>">
-              <div class="card_back center">
-                <div class="card_back_inside center">
-                  <img class="card_border card_back_img" src="../../../assets/images/pokeball.png" alt="">
-                </div>
-              </div>
-            </button>
-          <?php } ?>
-
-        <?php } ?>
-      </div>
-    <?php } ?>
-  </div>
+  <?php
+  if (!$board->is_waiting) {
+    generate_game_board($board->board);
+  } else {
+    generate_waiting_game($board->board);
+    show_next_turn();
+  }
+  ?>
 
   <div style="display: inline-block;">
     <div>KILL BUTTON</div>
