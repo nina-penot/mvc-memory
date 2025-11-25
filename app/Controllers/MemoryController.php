@@ -40,7 +40,7 @@ class MemoryController extends BaseController
         }
 
         if (!isset($_SESSION["board"])) {
-            $board = new Game(6, $card_objs);
+            $board = new Game(10, $card_objs);
             $_SESSION["board"] = serialize($board);
             // $_SESSION["board"] = $board;
         }

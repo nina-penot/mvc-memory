@@ -6,7 +6,7 @@
 
 <?php if (!empty($cards)) { ?>
     <?php foreach ($rows as $row) { ?>
-        <div class="float_left gap_small">
+        <div style="margin-bottom: 10px;" class="float_left gap_small">
             <?php foreach ($row as $card) { ?>
 
                 <div class="card_main card_front gradient_<?= $types[$card["type_id"]] ?> center">

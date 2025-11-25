@@ -14,7 +14,12 @@
 //- game end: record final score (less is better), win message with score, 
 //button "start another game"
 
-print_r($board->revealed_cards);
+$g_o = $board->is_game_over() ? "yes" : "no";
+echo "game over? ", $g_o;
+br();
+
+echo "total cards : ";
+print_r($board->total_cards);
 
 ?>
 
@@ -28,43 +33,33 @@ print_r($board->revealed_cards);
 
           <?php if ($card_val->is_revealed == true) { ?>
 
-            <?php if (!empty($board->ignored_cards)) { ?>
-              <?php if (!in_array($card_val, $board->ignored_cards)) { ?>
+            <?php if (!$card_val->is_ignored) { ?>
 
-                <button type="submit" name="card" id="card_<?= $card_key ?>" value="<?= $card_key ?>" class="card_main card_front center gradient_<?= $card_val->type ?>">
-                  <div class="card_content center">
-                    <img class="img_size" src="<?= $card_val->img ?>" alt="<?= $card_val->name ?>">
-                  </div>
-                  <div class="card_name"><?= $card_val->name ?></div>
-                </button>
-
-              <?php } else { ?>
-
-                <div id="card_<?= $card_key ?>" value="<?= $card_key ?>" class="card_main card_front center gradient_<?= $card_val->type ?>">
+              <button type="submit" name="card" id="card_<?= $card_key ?>" value="<?= $card_key ?>" class="button_killer">
+                <div class="card_main card_front center gradient_<?= $card_val->type ?>">
                   <div class="card_content center">
                     <img class="img_size" src="<?= $card_val->img ?>" alt="<?= $card_val->name ?>">
                   </div>
                   <div class="card_name"><?= $card_val->name ?></div>
                 </div>
-
-              <?php } ?>
+              </button>
 
             <?php } else { ?>
 
-              <button type="submit" name="card" id="card_<?= $card_key ?>" value="<?= $card_key ?>" class="card_main card_front center gradient_<?= $card_val->type ?>">
+              <div id="card_<?= $card_key ?>" value="<?= $card_key ?>" class="card_main card_front center gradient_<?= $card_val->type ?>">
                 <div class="card_content center">
                   <img class="img_size" src="<?= $card_val->img ?>" alt="<?= $card_val->name ?>">
                 </div>
                 <div class="card_name"><?= $card_val->name ?></div>
-              </button>
+              </div>
 
             <?php } ?>
 
           <?php } else { ?>
-            <button type="submit" name="card" id="card_<?= $card_key ?>" value="<?= $card_key ?>">
+            <button class="button_killer" type="submit" name="card" id="card_<?= $card_key ?>" value="<?= $card_key ?>">
               <div class="card_back center">
                 <div class="card_back_inside center">
-                  <img class="card_border" src="../../../assets/images/pokeball.png" alt="">
+                  <img class="card_border card_back_img" src="../../../assets/images/pokeball.png" alt="">
                 </div>
               </div>
             </button>
@@ -100,7 +95,7 @@ print_r($board->revealed_cards);
 
   <div class="card_back center">
     <div class="card_back_inside center">
-      <img class="card_border" src="../../../assets/images/pokeball.png" alt="">
+      <img class="card_border card_back_img" src="../../../assets/images/pokeball.png" alt="">
     </div>
   </div>
 

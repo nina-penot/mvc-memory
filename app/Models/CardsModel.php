@@ -231,7 +231,7 @@ class Game
     function get_revealed_cards()
     {
         foreach ($this->total_cards as $card) {
-            if ($card->is_ignored == false and $card->is_revealed) {
+            if ($card->is_ignored == false and $card->is_revealed == true) {
                 $this->revealed_cards[] = $card;
             }
         }
@@ -251,11 +251,14 @@ class Game
         if (!empty($this->revealed_cards) and count($this->revealed_cards) == 2) {
             if ($this->revealed_cards[0] == $this->revealed_cards[1]) {
                 //pair get
+                $this->strikes++;
                 $this->revealed_cards[0]->is_ignored = true;
                 $this->revealed_cards[1]->is_ignored = true;
                 $this->clear_revealed();
             } else {
+                //needs to not do that and wait for an input 'next turn' instead
                 //unreveal cards
+                $this->strikes++;
                 foreach ($this->total_cards as $card) {
                     if ($card->is_revealed == true and $card->is_ignored == false) {
                         $card->card_turn();
@@ -267,8 +270,21 @@ class Game
         }
     }
 
+    function wait_next_turn() {}
+
     function is_game_over()
     {
-        //if all cards in total revealed, game is over
+        $get_revealed = [];
+        foreach ($this->total_cards as $card) {
+            if ($card->is_revealed == true) {
+                $get_revealed[] = $card;
+            }
+        }
+
+        if (count($this->total_cards) == count($get_revealed)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

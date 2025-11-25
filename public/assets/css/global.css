@@ -1,12 +1,25 @@
 :root {
     --card_shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.5);
+    --card_height: 250px;
+    --card_width: calc(var(--card_height)/1.4);
+    --card_circle: calc(var(--card_height)/1.75);
 }
 
-button {
-    /* background: none; */
+/* button {
+    background: none;
     color: inherit;
     border: none;
-    /* padding: 0; */
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+} */
+
+.button_killer {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
     font: inherit;
     cursor: pointer;
     outline: inherit;
@@ -40,6 +53,13 @@ main {
 
 .gap_small {
     gap: 10px;
+}
+
+.anchor {
+    position: relative;
+    top: -150px;
+    visibility: hidden;
+    gap: none;
 }
 
 /* ---------------------------------------------------------------------------- */
@@ -123,8 +143,8 @@ main {
 
 .card_main {
     border-radius: 15px;
-    height: 350px;
-    width: 250px;
+    height: var(--card_height);
+    width: var(--card_width);
     overflow: hidden;
 }
 
@@ -155,13 +175,13 @@ main {
 
 .card_content {
     background-color: white;
-    width: 200px;
-    height: 200px;
+    width: var(--card_circle);
+    height: var(--card_circle);
     border-radius: 100%;
 }
 
 .img_size {
-    width: 250px;
+    width: calc(var(--card_width) - 11px);
 }
 
 /* Card back */
@@ -173,17 +193,21 @@ main {
 .card_back {
     border-radius: 15px;
     background-color: #3e040a;
-    height: 350px;
-    width: 250px;
+    height: var(--card_height);
+    width: var(--card_width);
     overflow: hidden;
 }
 
 .card_back_inside {
     border-radius: 10px;
     background-color: #ffffff;
-    height: calc(350px - 10px);
-    width: calc(250px - 10px);
+    height: calc(var(--card_height) - 10px);
+    width: calc(var(--card_width) - 10px);
     overflow: hidden;
+}
+
+.card_back_img {
+    height: calc(var(--card_height) * 1.5);
 }
 
 .card_back:hover {
