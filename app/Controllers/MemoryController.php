@@ -198,4 +198,9 @@ class MemoryController extends BaseController
 
         $this->render('memory/cardmaker', $data);
     }
+
+    function scoreboard()
+    {
+        $this->render('memory/scoreboard');
+    }
 }

@@ -27,5 +27,6 @@ $router->post("/memory","App\Controllers\MemoryController@index");
 $router->get("/card_show","App\Controllers\MemoryController@card_show");
 $router->get("/cardmaker","App\Controllers\MemoryController@cardmaker");
 $router->post("/cardmaker","App\Controllers\MemoryController@cardmaker");
+$router->get("/scoreboard","App\Controllers\MemoryController@scoreboard");
 
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
