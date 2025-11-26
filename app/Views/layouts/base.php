@@ -26,9 +26,18 @@
   <nav>
     <a href="/">Accueil</a> |
     <a href="/memory">Jeu Memory</a> |
-    <a href="/cardmaker">Cardmaker</a> |
+    <?php if (is_admin()) { ?>
+      <a href="/cardmaker">Cardmaker</a> |
+    <?php } ?>
     <a href="/card_show">Voir cartes</a> |
-    <a href="/about">About</a>
+    <a href="/about">About</a> |
+    <?php if (is_logged_in()) { ?>
+      <a href="/profile">Profil</a> |
+      <a href="/logout">Déconnexion</a>
+    <?php } else { ?>
+      <a href="/login">Connexion</a> |
+      <a href="/register">Inscription</a>
+    <?php } ?>
   </nav>
 
   <!-- Contenu principal injecté depuis BaseController -->

@@ -1,5 +1,9 @@
 <?php
 
+//----------------------------------------
+//DIVERS
+//----------------------------------------
+
 /**
  * Redirection HTTP
  */
@@ -49,6 +53,10 @@ function controller_to_dirname($str)
     $name = str_replace("Controller", "", $str);
     return strtolower($name);
 }
+
+//----------------------------------------
+//CARDMAKER
+//----------------------------------------
 
 /**
  * Rend un string en majuscules
@@ -118,6 +126,10 @@ function is_string_allowed($str)
         return false;
     }
 }
+
+//----------------------------------------
+//MEMORY GAME
+//----------------------------------------
 
 /**
  * Créé un anchor pour la redirection
@@ -257,3 +269,31 @@ function show_win_message()
     <div>Good job, keept it up!</div>
 
 <?php }
+
+//----------------------------------------
+//USER MANAGEMENT
+//----------------------------------------
+
+function is_logged_in()
+{
+    return isset($_SESSION["user"]);
+}
+
+function is_admin()
+{
+    if (isset($_SESSION["user"])) {
+        if ($_SESSION["user"]["is_admin"] == true) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+function logout()
+{
+    unset($_SESSION["user"]);
+    redirect("/");
+}
