@@ -46,6 +46,7 @@ class Router
     {
         if ($uri != "/memory") {
             unset($_SESSION["board"]);
+            unset($_SESSION["game_state"]);
         }
         // On extrait uniquement le chemin (sans paramètres GET ou #ancre)
         $path = parse_url($uri, PHP_URL_PATH) ?? '/';

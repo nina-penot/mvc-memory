@@ -38,70 +38,75 @@ class MemoryController extends BaseController
         //game start (open page)
         if (!isset($_SESSION["board"])) {
             //show start menu
-            $game_state = "start";
+            $_SESSION["game_state"] = "start";
+            $board = "";
+        } else {
+            $board = $_SESSION["board"];
         }
 
         //game on (playing)
         if (isset($_POST["start_game"])) {
-            $board = new Game($_POST["difficulty"], $card_objs);
-            $_SESSION["board"] = serialize($board);
-            $game_state = "playing";
-            $data['board'] = unserialize($_SESSION["board"]);
+            $board_ = new Game($_POST["difficulty"], $card_objs);
+            $_SESSION["board"] = serialize($board_);
+            $_SESSION["game_state"] = "playing";
+            $_SESSION["time"]["start"] = time();
         }
 
-        //game over (game end menu)
-        if (isset($_SESSION["board"]) and $_SESSION["board"]->is_game_over()) {
-            $game_state = "over";
+        if ($_SESSION["game_state"] == "playing") {
+
+            if (isset($_POST["card"])) {
+                $_SESSION["board"] = unserialize($_SESSION["board"]);
+                $_SESSION["board"]->total_cards[$_POST["card"]]->card_turn();
+                $_SESSION["board"]->total_cards[$_POST["card"]]->wait();
+
+                $_SESSION["board"]->check_pair();
+
+                if ($_SESSION["board"]->is_game_over()) {
+                    $_SESSION["game_state"] = "over";
+                    $_SESSION["time"]["end"] = time();
+                }
+
+                $_SESSION["board"] = serialize($_SESSION["board"]);
+                redirect("/memory#anchor_" . $_POST["card"]);
+            }
+
+            if (isset($_POST["next_turn"])) {
+                $_SESSION["board"] = unserialize($_SESSION["board"]);
+                $_SESSION["board"]->next_turn();
+                $_SESSION["board"] = serialize($_SESSION["board"]);
+            }
         }
 
-        //old code
+        if ($_SESSION["game_state"] == "over") {
+            $_SESSION["board"] = unserialize($_SESSION["board"]);
+            //save the score in the scoreboard
+            //saves strikes, time and pair amount
+            //also saves in user profile if logged in
+            $_SESSION["board"] = serialize($_SESSION["board"]);
+        }
 
         if (isset($_POST["kill"])) {
             if (isset($_SESSION["board"])) unset($_SESSION["board"]);
         }
 
-        // if (!isset($_SESSION["board"])) {
-        //     $board = new Game(6, $card_objs);
-        //     $_SESSION["board"] = serialize($board);
-        // }
-
-        if (isset($_POST["next_turn"])) {
-            //serialize block start
-            $_SESSION["board"] = unserialize($_SESSION["board"]);
-            //--------
-
-            $_SESSION["board"]->next_turn();
-
-            //-----
-            $_SESSION["board"] = serialize($_SESSION["board"]);
-            //serialize block end
+        if (isset($_POST["play_again"])) {
+            unset($_SESSION["board"]);
+            unset($_SESSION["time"]);
+            $_SESSION["game_state"] = "start";
         }
 
-        if (isset($_POST["card"])) {
-            //serialize block start
-            $_SESSION["board"] = unserialize($_SESSION["board"]);
-            //--------
+        $game_state = $_SESSION["game_state"];
 
-            $_SESSION["board"]->total_cards[$_POST["card"]]->card_turn();
-            $_SESSION["board"]->total_cards[$_POST["card"]]->wait();
-
-            $_SESSION["board"]->check_pair();
-
-            // $_SESSION["board"]->clear_revealed();
-            if ($_SESSION["board"]->is_game_over) {
-                $score = "GAME DONE!! your score = " . $_SESSION["board"]->score;
-            }
-
-            //-----
-            $_SESSION["board"] = serialize($_SESSION["board"]);
-            //serialize block end
-
-            redirect("/memory#anchor_" . $_POST["card"]);
-            echo $_POST["card"];
+        if (isset($_SESSION["board"])) {
+            $board = unserialize($_SESSION["board"]);
+        } else {
+            $board = "";
         }
 
-        if (isset($score)) {
-            $data['score'] = $score;
+        if (isset($_SESSION["time"]["end"])) {
+            $time = $_SESSION["time"]["end"] - $_SESSION["time"]["start"];
+        } else {
+            $time = 0;
         }
 
         $data = [
@@ -109,6 +114,8 @@ class MemoryController extends BaseController
             'title' => "Mes cartes",
             "cards" => $cards,
             "card_objs" => $card_objs,
+            'board' => $board,
+            'time' => $time
         ];
 
         $this->render('memory/index', $data);
@@ -144,7 +151,7 @@ class MemoryController extends BaseController
             'title' => "Mes cartes",
             'types' => $types,
             "cards" => $cards->all(),
-            'rows' => $rows
+            'rows' => $rows,
         ];
 
         $this->render('memory/card_show', $data);

@@ -1,5 +1,5 @@
 <?php
-// print_r($_SESSION);
+print_r($board);
 ?>
 
 <!-- Block démarrage du jeu -->
@@ -42,16 +42,6 @@
       }
         ?>
     </select>
-
-    <!-- Add if not login, input name -->
-    <?php
-    if (!isset($_SESSION["user"])) { ?>
-
-      <div>Vous n'êtes pas connecté, entrez un nom pour apparaître sur le scoreboard.</div>
-      <input type="text" name="username">
-
-    <?php }
-    ?>
 
     <button type="submit" name="start_game">START</button>
   </form>
@@ -108,7 +98,7 @@
 
     <div>Vous avez fini !</div>
     <div>Votre score :</div>
-    <div>Jeu de <?= $board->pair_amount ?> paires en <?= $board->strikes ?> coups, en <?= $time ?> sec !</div>
+    <div>Jeu de (insert pair here) en <?= $board->strikes ?> coups, en (insert time here)</div>
     <button type="submit" name="play_again">REJOUER</button>
 
   </form>
@@ -116,19 +106,19 @@
 <?php } ?>
 
 <?php
-// echo "SESSION BOARD TEST = ";
-// print_r($_SESSION["board"]);
-// br();
-// echo "------";
-// br();
-// foreach (get_defined_vars() as $k => $v) {
-//   print_r($k);
-//   echo " => ";
-//   print_r($v);
-//   br();
-//   echo "-------";
-//   br();
-// }
-// br();
-// print_r($board);
+echo "SESSION BOARD TEST = ";
+print_r($_SESSION["board"]);
+br();
+echo "------";
+br();
+foreach (get_defined_vars() as $k => $v) {
+  print_r($k);
+  echo " => ";
+  print_r($v);
+  br();
+  echo "-------";
+  br();
+}
+br();
+print_r($board);
 ?>
