@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Core\Database;
 
-class Scoreboard
+class ScoreboardModel
 {
     /**
      * Renvoie tout le scoreboard
@@ -20,6 +20,9 @@ class Scoreboard
         return $stmt->fetchAll();
     }
 
+    /**
+     * Donne tous les scores d'un utilisateur
+     */
     function score_by_user($username)
     {
         $stmt = Database::getPdo()->prepare(
@@ -33,12 +36,49 @@ class Scoreboard
         return $score;
     }
 
+    /**
+     * Donne le top 10 du scoreboard
+     */
     function top_ten()
     {
         $stmt = Database::getPdo()->query(
             'SELECT * FROM scoreboard ORDER BY score ASC LIMIT 10'
         );
+
+        return $stmt->fetchAll();
     }
 
-    function save_score($username, $strikes, $pairs, $time, $score) {}
+    function save_score($username, $strikes, $pairs, $time, $score)
+    {
+        $stmt = Database::getPdo()->prepare(
+            'INSERT INTO scoreboard (username, strikes, pairs, time, score, date)
+            VALUES (?, ?, ?, ?, ?, NOW())'
+        );
+
+        $stmt->execute([$username, $strikes, $pairs, $time, $score]);
+    }
+
+    /**
+     * Donne le rang général dans le scoreboard d'un utilisateur
+     */
+    function get_rank($username)
+    {
+        //example:
+        //WITH BigRanks AS 
+        //( SELECT *, ROW_NUMBER() OVER( ORDER BY cards.type_id DESC) AS Ranks FROM cards ) 
+        //SELECT name , type_id, Ranks FROM BigRanks WHERE name = 'PIKACHU' ORDER BY Ranks; 
+        //--->or SELECT MAX(type_id) as bestrank, name
+        $stmt = Database::getPdo()->prepare(
+            'WITH BigRanks AS
+            (
+            SELECT *, ROW_NUMBER() OVER( ORDER BY scoreboard.score DESC) AS rank
+            FROM scoreboard
+            )
+ 
+            SELECT username, MAX(score) as bestrank
+            FROM BigRanks
+            WHERE username = ?
+            ORDER BY Ranks;'
+        );
+    }
 }

@@ -1,17 +1,6 @@
 <?php
-if (isset($errors)) {
-    echo "ERREUR : ";
-    br();
-    foreach ($errors as $e) {
-        echo $e;
-        br();
-    }
-}
-
-if (isset($success)) {
-    echo $success;
-    br();
-}
+error_handle($errors);
+success_handle($success);
 ?>
 
 <form method="post">

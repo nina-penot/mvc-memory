@@ -47,6 +47,7 @@ class MemoryController extends BaseController
         //game on (playing)
         if (isset($_POST["start_game"])) {
             $board_ = new Game($_POST["difficulty"], $card_objs);
+            $_SESSION["temp_user"] = $_POST["temp_user"];
             $_SESSION["board"] = serialize($board_);
             $_SESSION["game_state"] = "playing";
             $_SESSION["time"]["start"] = time();

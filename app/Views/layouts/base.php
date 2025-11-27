@@ -26,6 +26,7 @@
   <nav>
     <a href="/">Accueil</a> |
     <a href="/memory">Jeu Memory</a> |
+    <a href="/scoreboard">Scoreboard</a> |
     <?php if (is_admin()) { ?>
       <a href="/cardmaker">Cardmaker</a> |
     <?php } ?>

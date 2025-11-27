@@ -54,6 +54,35 @@ function controller_to_dirname($str)
     return strtolower($name);
 }
 
+function error_handle($errors)
+{
+    echo "ERREUR : ";
+    br();
+    if (gettype($errors) == "array") {
+        foreach ($errors as $e) {
+            echo $e;
+            br();
+        }
+    } elseif (gettype($errors) == "string") {
+        echo $errors;
+        br();
+    }
+}
+
+function success_handle($success)
+{
+    br();
+    if (gettype($success) == "array") {
+        foreach ($success as $e) {
+            echo $e;
+            br();
+        }
+    } elseif (gettype($success) == "string") {
+        echo $success;
+        br();
+    }
+}
+
 //----------------------------------------
 //CARDMAKER
 //----------------------------------------
@@ -360,6 +389,12 @@ function score_calc($pairs, $strikes, $time)
 //USER MANAGEMENT
 //----------------------------------------
 
+function log_in($username, $is_admin)
+{
+    $_SESSION["user"] = $username;
+    $_SESSION["user"]["is_admin"] = $is_admin;
+}
+
 function is_logged_in()
 {
     return isset($_SESSION["user"]);
@@ -382,4 +417,16 @@ function logout()
 {
     unset($_SESSION["user"]);
     redirect("/");
+}
+
+/**
+ * Vérifie qu'un username n'ait pas de caractères spéciaux
+ */
+function is_username_allowed($str)
+{
+    if (preg_match("/^[a-zA-Z0-9\p{L}\s\-_ ]+$/u", $str)) {
+        return true;
+    } else {
+        return false;
+    }
 }

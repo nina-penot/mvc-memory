@@ -45,10 +45,10 @@
 
     <!-- Add if not login, input name -->
     <?php
-    if (!isset($_SESSION["user"])) { ?>
+    if (!is_logged_in()) { ?>
 
       <div>Vous n'êtes pas connecté, entrez un nom pour apparaître sur le scoreboard.</div>
-      <input type="text" name="username">
+      <input type="text" name="temp_user">
 
     <?php }
     ?>
