@@ -48,6 +48,7 @@ class Router
             unset($_SESSION["board"]);
             unset($_SESSION["game_state"]);
             unset($_SESSION["temp_user"]);
+            unset($_SESSION["time"]);
         }
         // On extrait uniquement le chemin (sans paramètres GET ou #ancre)
         $path = parse_url($uri, PHP_URL_PATH) ?? '/';
@@ -68,8 +69,8 @@ class Router
         }
 
         // Si aucune route trouvée, on renvoie une erreur 404
-        http_response_code(404);
-        echo "404 - Page non trouvée";
+        // http_response_code(404);
+        // echo "404 - Page non trouvée";
         redirect("/page404");
     }
 }

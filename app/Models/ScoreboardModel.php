@@ -42,7 +42,7 @@ class ScoreboardModel
     function top_ten()
     {
         $stmt = Database::getPdo()->query(
-            'SELECT * FROM scoreboard ORDER BY score ASC LIMIT 10'
+            'SELECT *, DATE_FORMAT(date, "%d/%m/%Y") as "cleandate" FROM scoreboard ORDER BY score DESC LIMIT 10'
         );
 
         return $stmt->fetchAll();

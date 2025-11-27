@@ -26,6 +26,7 @@ $router->post("/login", "App\Controllers\AuthController@login");
 $router->get("/logout", "App\Controllers\AuthController@logout");
 $router->get("/", "App\Controllers\HomeController@index");
 $router->get("/about", "App\Controllers\HomeController@about");
+$router->get("/page404", "App\Controllers\HomeController@page404");
 $router->get("/memory", "App\Controllers\MemoryController@index");
 $router->post("/memory", "App\Controllers\MemoryController@index");
 $router->get("/card_show", "App\Controllers\MemoryController@card_show");

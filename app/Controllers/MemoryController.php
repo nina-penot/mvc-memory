@@ -8,6 +8,7 @@ use App\Helper\Helper;
 use App\Models\Card;
 use App\Models\Card_tester;
 use App\Models\Game;
+use App\Models\ScoreboardModel;
 
 /**
  * Classe MemoryController
@@ -27,6 +28,7 @@ class MemoryController extends BaseController
     public function index()
     {
         $cardsmodel = new CardsModel();
+        $scoremodel = new ScoreboardModel;
         $cards = $cardsmodel->all();
         $types = $cardsmodel->clean_types_array();
 
@@ -47,7 +49,13 @@ class MemoryController extends BaseController
         //game on (playing)
         if (isset($_POST["start_game"])) {
             $board_ = new Game($_POST["difficulty"], $card_objs);
-            $_SESSION["temp_user"] = $_POST["temp_user"];
+            if (!empty($_POST["temp_user"])) {
+                $_SESSION["temp_user"] = $_POST["temp_user"];
+            } else {
+                if (isset($_SESSION["temp_user"])) {
+                    unset($_SESSION["temp_user"]);
+                }
+            }
             $_SESSION["board"] = serialize($board_);
             $_SESSION["game_state"] = "playing";
             $_SESSION["time"]["start"] = time();
@@ -78,11 +86,36 @@ class MemoryController extends BaseController
             }
         }
 
+        if (isset($_SESSION["time"]["end"])) {
+            $time = $_SESSION["time"]["end"] - $_SESSION["time"]["start"];
+        } else {
+            $time = 0;
+        }
+
         if ($_SESSION["game_state"] == "over") {
             $_SESSION["board"] = unserialize($_SESSION["board"]);
             //save the score in the scoreboard
             //saves strikes, time and pair amount
             //also saves in user profile if logged in
+            if (is_logged_in()) {
+                $scoremodel->save_score(
+                    $_SESSION["user"]["username"],
+                    $_SESSION["board"]->strikes,
+                    $_SESSION["board"]->pair_amount,
+                    $time,
+                    score_calc($_SESSION["board"]->pair_amount, $_SESSION["board"]->strikes, $time)
+                );
+            } else {
+                if (isset($_SESSION["temp_user"])) {
+                    $scoremodel->save_score(
+                        $_SESSION["temp_user"],
+                        $_SESSION["board"]->strikes,
+                        $_SESSION["board"]->pair_amount,
+                        $time,
+                        score_calc($_SESSION["board"]->pair_amount, $_SESSION["board"]->strikes, $time)
+                    );
+                }
+            }
             $_SESSION["board"] = serialize($_SESSION["board"]);
         }
 
@@ -102,12 +135,6 @@ class MemoryController extends BaseController
             $board = unserialize($_SESSION["board"]);
         } else {
             $board = "";
-        }
-
-        if (isset($_SESSION["time"]["end"])) {
-            $time = $_SESSION["time"]["end"] - $_SESSION["time"]["start"];
-        } else {
-            $time = 0;
         }
 
         $data = [
@@ -201,6 +228,15 @@ class MemoryController extends BaseController
 
     function scoreboard()
     {
-        $this->render('memory/scoreboard');
+        $scoremodel = new ScoreboardModel;
+
+        //récupère le top 10
+        $topten = $scoremodel->top_ten();
+
+        $data = [
+            "topten" => $topten,
+        ];
+
+        $this->render('memory/scoreboard', $data);
     }
 }

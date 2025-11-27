@@ -2,7 +2,7 @@
 // print_r($_SESSION);
 // br();
 // print_r($_POST);
-print_r($board);
+// print_r($board);
 ?>
 
 <!-- Block démarrage du jeu -->
