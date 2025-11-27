@@ -2,8 +2,12 @@
 if (!is_admin()) {
     redirect("/page404");
 }
-error_handle($errors);
-success_handle($success);
+if (isset($errors)) {
+    error_handle($errors);
+}
+if (isset($success)) {
+    success_handle($success);
+}
 ?>
 
 <form method="post">

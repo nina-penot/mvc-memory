@@ -385,6 +385,22 @@ function score_calc($pairs, $strikes, $time)
     return $score;
 }
 
+function rank_congratulations($rank)
+{
+    if ($rank == 1) {
+        return "Félicitations !! Vous êtes premier !!";
+    }
+    if ($rank < 1 and $rank >= 3) {
+        return "Félicitations ! Vous êtes dans le top 3 !";
+    }
+    if ($rank > 3 and $rank <= 10) {
+        return "Félicitations, vous apparaissez dans le scoreboard !";
+    }
+    if ($rank > 10) {
+        return "Vous n'êtes pas encore dans le scoreboard.";
+    }
+}
+
 //----------------------------------------
 //USER MANAGEMENT
 //----------------------------------------

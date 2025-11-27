@@ -69,16 +69,20 @@ class ScoreboardModel
         //SELECT name , type_id, Ranks FROM BigRanks WHERE name = 'PIKACHU' ORDER BY Ranks; 
         //--->or SELECT MAX(type_id) as bestrank, name
         $stmt = Database::getPdo()->prepare(
-            'WITH BigRanks AS
-            (
-            SELECT *, ROW_NUMBER() OVER( ORDER BY scoreboard.score DESC) AS rank
-            FROM scoreboard
-            )
- 
-            SELECT username, MAX(score) as bestrank
-            FROM BigRanks
-            WHERE username = ?
+            'WITH BigRanks AS 
+            ( SELECT *, ROW_NUMBER() OVER( ORDER BY scoreboard.score DESC) 
+            AS Ranks FROM scoreboard ) 
+            SELECT Ranks FROM BigRanks 
+            WHERE username = ? 
             ORDER BY Ranks;'
         );
+
+        $stmt->execute([$username]);
+
+        $rank = $stmt->fetch();
+
+        $rank = $rank["Ranks"];
+
+        return $rank;
     }
 }

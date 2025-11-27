@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\ScoreboardModel;
 use App\Models\UserModel;
 use Core\BaseController;
 
@@ -19,9 +20,19 @@ class AuthController extends BaseController
      */
     function profile()
     {
+        $username = $_SESSION["user"]["username"];
+        $usermodel = new UserModel;
+        $scoremodel = new ScoreboardModel;
         //get user info
+        $user_info = "";
         //get user scores
-        $data = [];
+        $scores = $scoremodel->score_by_user($username);
+        $rank = $scoremodel->get_rank($username);
+
+        $data = [
+            'scores' => $scores,
+            'rank' => $rank
+        ];
         $this->render("auth/profile", $data);
     }
 
@@ -83,7 +94,11 @@ class AuthController extends BaseController
             //check if the user exists
             if ($usermodel->does_user_exists($username)) {
                 if ($usermodel->is_password_correct($username, $password)) {
-                    $_SESSION["user"] = $usermodel->get_user_by_username($username);
+                    $user_info = $usermodel->get_user_by_username($username);
+                    $_SESSION["user"] = [
+                        "username" => $user_info["username"],
+                        "is_admin" => $user_info["is_admin"]
+                    ];
                     redirect("/profile");
                 } else {
                     $errors[] = "Mot de passe incorrecte.";
