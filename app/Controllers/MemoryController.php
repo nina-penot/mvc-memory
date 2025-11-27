@@ -111,7 +111,6 @@ class MemoryController extends BaseController
 
         $data = [
             'game_state' => $game_state,
-            'title' => "Mes cartes",
             "cards" => $cards,
             "card_objs" => $card_objs,
             'board' => $board,

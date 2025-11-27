@@ -271,6 +271,92 @@ function show_win_message()
 <?php }
 
 //----------------------------------------
+//SCORE
+//----------------------------------------
+
+function clean_time($time)
+{
+    $unit_minute = 60;
+    $unit_hour = 60 * 60;
+
+    $hour = (int) gmdate("H", $time);
+    $minute = (int) gmdate("i", $time);
+    $seconds = (int) gmdate("s", $time);
+
+    $hour_f = $hour . " h";
+    $min_f = $minute . " min";
+    $sec_f = $seconds . " sec";
+
+    if ($hour > 0) {
+        $result = $hour_f . " " . $min_f . " " . $sec_f;
+    }
+    if ($hour == 0 and $minute > 0) {
+        $result = $min_f . " " . $sec_f;
+    }
+    if ($hour == 0 and $minute == 0) {
+        $result = $sec_f;
+    }
+    return $result;
+}
+
+function time_bonus_calc($time, $pairs)
+{
+    $bonus_table = [
+        "great" => 100,
+        "good" => 50,
+        "ok" => 25,
+        "bad" => 0
+    ];
+    //for time bonus calculate time per strike
+    $time_great = $pairs;
+    //+100
+    $time_good = $pairs * 2;
+    //+50
+    $time_ok = $pairs * 4;
+    //+25
+    $time_bad = $pairs * 10;
+    //0 if more than time_bad
+
+    if ($time <= $time_great and $time < $time_good) {
+        $bonus = $bonus_table["great"];
+    } elseif ($time >= $time_good and $time < $time_ok) {
+        $bonus = $bonus_table["good"];
+    } elseif ($time >= $time_ok and $time < $time_bad) {
+        $bonus = $bonus_table["ok"];
+    } elseif ($time >= $time_bad) {
+        $bonus = $bonus_table["bad"];
+    }
+
+    return $bonus;
+}
+
+function show_difficulty_bonus($difficulty)
+{
+    $bonus_difficulty = 10;
+    $bonus = $difficulty * $bonus_difficulty;
+    return $bonus;
+}
+
+function show_strikes_malus($strikes, $pairs)
+{
+    $malus = $strikes - $pairs;
+    return $malus;
+}
+
+function score_calc($pairs, $strikes, $time)
+{
+    $bonus_difficulty = 10;
+    $malus = $strikes - $pairs;
+
+    $time_bonus = time_bonus_calc($time, $pairs);
+
+    $score = (($pairs * $bonus_difficulty) - $malus) + $time_bonus;
+    $score < 0 ?? $score = 1;
+
+    return $score;
+}
+
+//----------------------------------------
 //USER MANAGEMENT
 //----------------------------------------
 

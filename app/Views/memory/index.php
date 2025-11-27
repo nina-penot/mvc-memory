@@ -108,8 +108,13 @@
 
     <div>Vous avez fini !</div>
     <div>Votre score :</div>
-    <div>Jeu de <?= $board->pair_amount ?> paires en <?= $board->strikes ?> coups, en <?= $time ?> sec !</div>
-    <button type="submit" name="play_again">REJOUER</button>
+    <div>Jeu de <?= $board->pair_amount ?> paires en <?= $board->strikes ?> coups, en <?= clean_time($time) ?> !</.div>
+      <div>Score :</div>
+      <div>BONUS DIFFICULTE : <?= $board->pair_amount ?> x 10 = <?= show_difficulty_bonus($board->pair_amount) ?></div>
+      <div>MALUS COUPS : - <?= show_strikes_malus($board->strikes, $board->pair_amount) ?></div>
+      <div>BONUS TEMPS : + <?= time_bonus_calc($time, $board->pair_amount) ?></div>
+      <div>SCORE FINAL : <?= score_calc($board->pair_amount, $board->strikes, $time) ?> !</div>
+      <button type="submit" name="play_again">REJOUER</button>
 
   </form>
 
