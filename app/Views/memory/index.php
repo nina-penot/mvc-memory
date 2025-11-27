@@ -1,5 +1,8 @@
 <?php
 // print_r($_SESSION);
+// br();
+// print_r($_POST);
+print_r($board);
 ?>
 
 <!-- Block démarrage du jeu -->
@@ -8,7 +11,7 @@
   <form method="post">
     <div>Sélectionnez une difficulté.</div>
     <select name="difficulty">
-      <?php for ($n = 3; $n < 18; $n++) {
+      <?php for ($n = 3; $n <= 18; $n++) {
         if ($n == 3) {
           //easy
       ?>

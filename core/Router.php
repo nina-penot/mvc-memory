@@ -70,6 +70,6 @@ class Router
         // Si aucune route trouvée, on renvoie une erreur 404
         http_response_code(404);
         echo "404 - Page non trouvée";
-        redirect("/");
+        redirect("/page404");
     }
 }

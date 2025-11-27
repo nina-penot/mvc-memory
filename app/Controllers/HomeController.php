@@ -36,8 +36,8 @@ class HomeController extends BaseController
         ]);
     }
 
-    // public function show()
-    // {
-    //     echo "Bonjour!";
-    // }
+    function page404()
+    {
+        $this->render('home/page404');
+    }
 }
