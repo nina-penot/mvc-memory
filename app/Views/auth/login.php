@@ -3,7 +3,13 @@
 if (isset($errors)) {
     error_handle($errors);
 }
-
+echo "POSTS : ";
+print_r($_POST);
+br();
+echo "SESSIONS : ";
+print_r($_SESSION);
+br();
+print_r($errors);
 ?>
 
 <form method="post">

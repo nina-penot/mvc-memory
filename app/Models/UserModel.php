@@ -35,7 +35,12 @@ class UserModel
         if (empty($user)) {
             return false;
         } else {
-            return true;
+            $user = all_uppercase($user["username"]);
+            if (all_uppercase($username) == $user) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 

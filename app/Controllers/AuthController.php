@@ -31,6 +31,7 @@ class AuthController extends BaseController
     function register()
     {
         $errors = [];
+        $data = [];
 
         $usermodel = new UserModel;
         //username must be unique
@@ -57,8 +58,6 @@ class AuthController extends BaseController
             }
         }
 
-        $data = [];
-
         if (!empty($errors)) {
             $data["errors"] = $errors;
         }
@@ -73,11 +72,15 @@ class AuthController extends BaseController
     function login()
     {
         $errors = [];
-        $usermodel = new UserModel;
-        //check if the user exists
-        if (isset($POST["login"])) {
+
+        $usermodel = new UserModel();
+
+        if (isset($_POST["login"])) {
             $username = $_POST["username"];
             $password = $_POST["password"];
+            $errors[] = $username . $password;
+
+            //check if the user exists
             if ($usermodel->does_user_exists($username)) {
                 if ($usermodel->is_password_correct($username, $password)) {
                     $_SESSION["user"] = $usermodel->get_user_by_username($username);
@@ -96,8 +99,6 @@ class AuthController extends BaseController
             $data['errors'] = $errors;
         }
 
-        //check if info/pass correct
-        //redirect to profile
         $this->render("auth/login", $data);
     }
 
