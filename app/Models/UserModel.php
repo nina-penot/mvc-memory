@@ -82,4 +82,26 @@ class UserModel
 
         return $stmt->fetch();
     }
+
+    function update_password($user_id, $pass)
+    {
+        $stmt = Database::getPdo()->prepare(
+            'UPDATE user
+            SET user.password = ?
+            WHERE user.id = ?'
+        );
+
+        $stmt->execute([$pass, $user_id]);
+    }
+
+    function update_username($user_id, $name)
+    {
+        $stmt = Database::getPdo()->prepare(
+            'UPDATE user
+            SET user.username = ?
+            WHERE user.id = ?'
+        );
+
+        $stmt->execute([$name, $user_id]);
+    }
 }

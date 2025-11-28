@@ -32,6 +32,8 @@ class MemoryController extends BaseController
         $cards = $cardsmodel->all();
         $types = $cardsmodel->clean_types_array();
 
+        // $_SESSION["observer"] = array();
+
         $card_objs = [];
         foreach ($cards as $card) {
             $card_objs[] = new Card($card["id"], $card["name"], $types[$card["type_id"]], $card["image"]);
@@ -48,6 +50,7 @@ class MemoryController extends BaseController
 
         //game on (playing)
         if (isset($_POST["start_game"])) {
+            $_SESSION["observer"][] = $_SERVER["REQUEST_URI"];
             $board_ = new Game($_POST["difficulty"], $card_objs);
             if (!empty($_POST["temp_user"])) {
                 $_SESSION["temp_user"] = $_POST["temp_user"];
@@ -63,11 +66,10 @@ class MemoryController extends BaseController
 
         if ($_SESSION["game_state"] == "playing") {
 
-            if (isset($_POST["card"])) {
+            if (is_post_set("card")) {
                 $_SESSION["board"] = unserialize($_SESSION["board"]);
-                $_SESSION["board"]->total_cards[$_POST["card"]]->card_turn();
-                $_SESSION["board"]->total_cards[$_POST["card"]]->wait();
-
+                $_SESSION["board"]->total_cards[post("card")]->card_turn();
+                $_SESSION["board"]->total_cards[post("card")]->wait();
                 $_SESSION["board"]->check_pair();
 
                 if ($_SESSION["board"]->is_game_over()) {
@@ -121,11 +123,15 @@ class MemoryController extends BaseController
 
         if (isset($_POST["kill"])) {
             if (isset($_SESSION["board"])) unset($_SESSION["board"]);
+            $_SESSION["game_state"] = "start";
         }
 
         if (isset($_POST["play_again"])) {
             unset($_SESSION["board"]);
             unset($_SESSION["time"]);
+            if (isset($_SESSION["temp_user"])) {
+                unset($_SESSION["temp_user"]);
+            }
             $_SESSION["game_state"] = "start";
         }
 

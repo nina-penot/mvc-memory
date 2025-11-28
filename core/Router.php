@@ -44,12 +44,22 @@ class Router
      */
     public function dispatch(string $uri, string $method): void
     {
-        if ($uri != "/memory") {
-            unset($_SESSION["board"]);
-            unset($_SESSION["game_state"]);
-            unset($_SESSION["temp_user"]);
-            unset($_SESSION["time"]);
-        }
+        // unset($_SESSION["observer"]);
+        $_SESSION["observer"][] = $uri;
+        // if ($uri === "/" or $uri === "/scoreboard") {
+        //     unset($_SESSION["board"]);
+        //     unset($_SESSION["game_state"]);
+        //     unset($_SESSION["temp_user"]);
+        //     unset($_SESSION["time"]);
+        // }
+
+        // if (!str_contains($uri, "memory")) {
+        //     unset($_SESSION["board"]);
+        //     unset($_SESSION["game_state"]);
+        //     unset($_SESSION["temp_user"]);
+        //     unset($_SESSION["time"]);
+        // }
+        echo !str_contains($uri, "memory");
         // On extrait uniquement le chemin (sans paramètres GET ou #ancre)
         $path = parse_url($uri, PHP_URL_PATH) ?? '/';
 

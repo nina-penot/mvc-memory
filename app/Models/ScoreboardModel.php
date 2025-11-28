@@ -26,7 +26,7 @@ class ScoreboardModel
     function score_by_user($username)
     {
         $stmt = Database::getPdo()->prepare(
-            'SELECT * FROM scoreboard WHERE scoreboard.username = ?'
+            'SELECT *, DATE_FORMAT(date, "%d/%m/%Y") as "cleandate" FROM scoreboard WHERE scoreboard.username = ?  ORDER BY score DESC'
         );
 
         $stmt->execute([$username]);

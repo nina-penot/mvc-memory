@@ -21,18 +21,49 @@ class AuthController extends BaseController
     function profile()
     {
         $username = $_SESSION["user"]["username"];
+        $user_id = $_SESSION["user"]["id"];
         $usermodel = new UserModel;
         $scoremodel = new ScoreboardModel;
-        //get user info
-        $user_info = "";
+
+        $success = [];
+        $errors = [];
+
         //get user scores
         $scores = $scoremodel->score_by_user($username);
         $rank = $scoremodel->get_rank($username);
 
+        if (is_post_set("update")) {
+            $new_name = post("updt_name");
+            $new_password = post("updt_password");
+
+            if (!empty($new_password)) {
+                $usermodel->update_password($user_id, $new_password);
+                $success[] = "Mot de passe mis à jou avec succès.";
+            }
+
+            if (!empty($new_name) or $new_name != $username) {
+                if (is_username_allowed($new_name)) {
+                    $usermodel->update_username($user_id, $new_name);
+                    $success[] = "Votre nom est mis à jour, vous êtes maintenant : " . $new_name . ".";
+                    $_SESSION["user"]["username"] = $new_name;
+                } else {
+                    $errors[] = "Votre nouveau nom contient des caractères non autorisés. Réessayez.";
+                }
+            }
+        }
+
         $data = [
             'scores' => $scores,
-            'rank' => $rank
+            'rank' => $rank,
+            'username' => $username
         ];
+
+        if (!empty($success)) {
+            $data["success"] = $success;
+        }
+        if (!empty($errors)) {
+            $data["errors"] = $errors;
+        }
         $this->render("auth/profile", $data);
     }
 
@@ -96,6 +127,7 @@ class AuthController extends BaseController
                 if ($usermodel->is_password_correct($username, $password)) {
                     $user_info = $usermodel->get_user_by_username($username);
                     $_SESSION["user"] = [
+                        "id" => $user_info["id"],
                         "username" => $user_info["username"],
                         "is_admin" => $user_info["is_admin"]
                     ];

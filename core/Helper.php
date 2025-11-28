@@ -71,7 +71,6 @@ function error_handle($errors)
 
 function success_handle($success)
 {
-    br();
     if (gettype($success) == "array") {
         foreach ($success as $e) {
             echo $e;
@@ -81,6 +80,26 @@ function success_handle($success)
         echo $success;
         br();
     }
+}
+
+/**
+ * Vérifie si $_POST est set, peut aussi vérifier un $_POST en particulier
+ */
+function is_post_set($value = NULL)
+{
+    if ($value != NULL) {
+        return isset($_POST[$value]);
+    } else {
+        return isset($_POST);
+    }
+}
+
+/**
+ * Donne la valeau d'un $_POST, plus facile à écrire
+ */
+function post($value)
+{
+    return $_POST[$value];
 }
 
 //----------------------------------------
@@ -346,7 +365,7 @@ function time_bonus_calc($time, $pairs)
     $time_bad = $pairs * 10;
     //0 if more than time_bad
 
-    if ($time <= $time_great and $time < $time_good) {
+    if ($time >= 0 and $time < $time_good) {
         $bonus = $bonus_table["great"];
     } elseif ($time >= $time_good and $time < $time_ok) {
         $bonus = $bonus_table["good"];

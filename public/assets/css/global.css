@@ -6,17 +6,26 @@
     --main_padding: 20px;
     --board_width: calc(100vw - var(--main_padding) * 2);
     --board_height: calc(100vh - var(--main_padding));
+
+    --dex_color_red: #dc0a2d;
+    --dex_color_red_shadow: #8b051d;
+    --dex_color_red_light: #f25f7c;
+    --dex_color_blue: #29aafd;
+    --dex_color_blue_shadow: #1561ac;
+    --dex_color_blue_light: #4ecdff;
+    --dex_color_green: #51ad60;
+    --dex_color_black: #242424;
+    --dex_color_yellow: #fde020;
+    --dex_color_white: #dedede;
+    --dex_color_white_shadow: #7d777b;
 }
 
-/* button {
-    background: none;
-    color: inherit;
-    border: none;
-    padding: 0;
-    font: inherit;
-    cursor: pointer;
-    outline: inherit;
-} */
+@font-face {
+    font-family: Pixelify;
+    /* set name */
+    src: url("../../assets/fonts/PixelifySans-Regular.ttf");
+    /* url of the font */
+}
 
 .button_killer {
     background: none;
@@ -29,21 +38,15 @@
     position: relative;
 }
 
+.link_killer {
+    text-decoration: none;
+    color: none;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-}
-
-nav {
-    background: #f4f4f4;
-    padding: 10px;
-}
-
-nav a {
-    margin-right: 10px;
-    text-decoration: none;
-    color: #333;
 }
 
 main {
@@ -70,6 +73,197 @@ main {
     position: absolute;
     top: -10vw;
     visibility: hidden;
+}
+
+/* ---------------------------------------------------------------------------- */
+/* HEADER */
+/* ---------------------------------------------------------------------------- */
+
+header {
+    background: var(--dex_color_red);
+    /* padding: 10px; */
+    width: 100%;
+    font-family: Pixelify;
+}
+
+.funny_sphere {
+    height: 150px;
+    width: 150px;
+    background-color: var(--dex_color_blue);
+    border-radius: 100%;
+    box-shadow: inset 0px 0px 0px 3px var(--dex_color_black),
+        inset -10px -10px 15px 0px var(--dex_color_blue_shadow),
+        inset 2px 3px 8px 0px var(--dex_color_blue_light);
+}
+
+.funny_sphere_cont {
+    margin: 10px;
+    height: 180px;
+    width: 180px;
+    border-radius: 100%;
+    background-color: var(--dex_color_white);
+    box-shadow: inset 0px 0px 0px 3px var(--dex_color_black);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.title_block_cont {
+    margin: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: var(--dex_color_white);
+    box-shadow: inset 0px 0px 0px 3px var(--dex_color_black);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.title_block {
+    padding: 10px;
+    background-color: var(--dex_color_blue);
+    border-radius: 10px;
+    color: var(--dex_color_black);
+}
+
+.title {
+    font-size: 100px;
+}
+
+.subtitle {
+    font-size: 50px;
+}
+
+/* ---------------------------------------------------------------------------- */
+/* NAV */
+/* ---------------------------------------------------------------------------- */
+
+nav {
+    background: var(--dex_color_red);
+    padding: 10px;
+    clear: both;
+}
+
+/* From Uiverse.io by cssbuttons-io */
+.nav_elem {
+    position: relative;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    outline-offset: 4px;
+    transition: filter 250ms;
+    user-select: none;
+    touch-action: manipulation;
+    font-family: Pixelify;
+}
+
+.nav_elem2 {
+    position: relative;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    outline-offset: 4px;
+    transition: filter 250ms;
+    user-select: none;
+    touch-action: manipulation;
+    font-family: Pixelify;
+}
+
+.nav_elem2>.shadow {
+    background: var(--dex_color_white_shadow);
+}
+
+.shadow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 2px;
+    background: var(--dex_color_blue_shadow);
+    will-change: transform;
+    transform: translateY(2px);
+    transition: transform 600ms cubic-bezier(.3, .7, .4, 1);
+}
+
+.nav_elem2>.edge {
+    background: linear-gradient(to left,
+            var(--dex_color_white_shadow) 0%,
+            var(--dex_color_white) 8%,
+            var(--dex_color_white) 92%,
+            var(--dex_color_white_shadow) 100%);
+}
+
+.edge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(to left,
+            var(--dex_color_blue_shadow) 0%,
+            var(--dex_color_blue) 8%,
+            var(--dex_color_blue) 92%,
+            var(--dex_color_blue_shadow) 100%);
+}
+
+.nav_elem2>.front {
+    color: var(--dex_color_black);
+    background: var(--dex_color_white);
+    box-shadow: inset 2px 2px 5px 0px var(--dex_color_white),
+        inset -2px -2px 5px 0px var(--dex_color_white_shadow);
+}
+
+.front {
+    display: block;
+    position: relative;
+    padding: 12px 27px;
+    border-radius: 2px;
+    font-size: 1.1rem;
+    color: white;
+    background: var(--dex_color_blue);
+    box-shadow: inset 2px 2px 5px 0px var(--dex_color_blue_light),
+        inset -2px -2px 5px 0px var(--dex_color_blue_shadow);
+    will-change: transform;
+    transform: translateY(-4px);
+    transition: transform 600ms cubic-bezier(.3, .7, .4, 1);
+}
+
+.nav_elem:hover,
+.nav_elem2:hover {
+    filter: brightness(110%);
+}
+
+.nav_elem:hover .front,
+.nav_elem2:hover .front {
+    transform: translateY(-6px);
+    transition: transform 250ms cubic-bezier(.3, .7, .4, 1.5);
+}
+
+.nav_elem:active .front,
+.nav_elem2:active .front {
+    transform: translateY(-2px);
+    transition: transform 34ms;
+}
+
+.nav_elem:hover .shadow,
+.nav_elem2:hover .shadow {
+    transform: translateY(4px);
+    transition: transform 250ms cubic-bezier(.3, .7, .4, 1.5);
+}
+
+.nav_elem:active .shadow,
+.nav_elem2:active .shadow {
+    transform: translateY(1px);
+    transition: transform 34ms;
+}
+
+.nav_elem:focus:not(:focus-visible),
+.nav_elem2:focus:not(:focus-visible) {
+    outline: none;
 }
 
 /* ---------------------------------------------------------------------------- */
