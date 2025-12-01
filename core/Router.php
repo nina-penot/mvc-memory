@@ -44,6 +44,10 @@ class Router
      */
     public function dispatch(string $uri, string $method): void
     {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         //unset($_SESSION["observer"]);
         // $_SESSION["observer"][] = $uri;
         // if ($uri === "/" or $uri === "/scoreboard") {
