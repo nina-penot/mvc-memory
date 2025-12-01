@@ -72,8 +72,31 @@ class MemoryController extends BaseController
                 $_SESSION["board"]->check_pair();
 
                 if ($_SESSION["board"]->is_game_over()) {
-                    $_SESSION["game_state"] = "over";
+                    //save the score in the scoreboard
+                    //saves strikes, time and pair amount
+                    //also saves in user profile if logged in
                     $_SESSION["time"]["end"] = time();
+                    $time = $_SESSION["time"]["end"] - $_SESSION["time"]["start"];
+                    if (is_logged_in()) {
+                        $scoremodel->save_score(
+                            $_SESSION["user"]["username"],
+                            $_SESSION["board"]->strikes,
+                            $_SESSION["board"]->pair_amount,
+                            $time,
+                            score_calc($_SESSION["board"]->pair_amount, $_SESSION["board"]->strikes, $time)
+                        );
+                    } else {
+                        if (isset($_SESSION["temp_user"])) {
+                            $scoremodel->save_score(
+                                $_SESSION["temp_user"],
+                                $_SESSION["board"]->strikes,
+                                $_SESSION["board"]->pair_amount,
+                                $time,
+                                score_calc($_SESSION["board"]->pair_amount, $_SESSION["board"]->strikes, $time)
+                            );
+                        }
+                    }
+                    $_SESSION["game_state"] = "over";
                 }
 
                 $_SESSION["board"] = serialize($_SESSION["board"]);
@@ -95,28 +118,6 @@ class MemoryController extends BaseController
 
         if ($_SESSION["game_state"] == "over") {
             $_SESSION["board"] = unserialize($_SESSION["board"]);
-            //save the score in the scoreboard
-            //saves strikes, time and pair amount
-            //also saves in user profile if logged in
-            if (is_logged_in()) {
-                $scoremodel->save_score(
-                    $_SESSION["user"]["username"],
-                    $_SESSION["board"]->strikes,
-                    $_SESSION["board"]->pair_amount,
-                    $time,
-                    score_calc($_SESSION["board"]->pair_amount, $_SESSION["board"]->strikes, $time)
-                );
-            } else {
-                if (isset($_SESSION["temp_user"])) {
-                    $scoremodel->save_score(
-                        $_SESSION["temp_user"],
-                        $_SESSION["board"]->strikes,
-                        $_SESSION["board"]->pair_amount,
-                        $time,
-                        score_calc($_SESSION["board"]->pair_amount, $_SESSION["board"]->strikes, $time)
-                    );
-                }
-            }
             $_SESSION["board"] = serialize($_SESSION["board"]);
         }
 
