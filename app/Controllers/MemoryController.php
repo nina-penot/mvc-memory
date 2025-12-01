@@ -9,6 +9,7 @@ use App\Models\Card;
 use App\Models\Card_tester;
 use App\Models\Game;
 use App\Models\ScoreboardModel;
+use App\Models\UserModel;
 
 /**
  * Classe MemoryController
@@ -27,8 +28,10 @@ class MemoryController extends BaseController
      */
     public function index()
     {
+        $errors = [];
         $cardsmodel = new CardsModel();
         $scoremodel = new ScoreboardModel;
+        $usermodel = new UserModel;
         $cards = $cardsmodel->all();
         $types = $cardsmodel->clean_types_array();
 
@@ -52,15 +55,21 @@ class MemoryController extends BaseController
         if (isset($_POST["start_game"])) {
             $board_ = new Game($_POST["difficulty"], $card_objs);
             if (!empty($_POST["temp_user"])) {
-                $_SESSION["temp_user"] = $_POST["temp_user"];
+                if ($usermodel->does_user_exists($_POST["temp_user"])) {
+                    $errors[] = "Ceci est un utilisateur existant. Connectez-vous ou choisissez un autre nom.";
+                } else {
+                    $_SESSION["temp_user"] = $_POST["temp_user"];
+                }
             } else {
                 if (isset($_SESSION["temp_user"])) {
                     unset($_SESSION["temp_user"]);
                 }
             }
-            $_SESSION["board"] = serialize($board_);
-            $_SESSION["game_state"] = "playing";
-            $_SESSION["time"]["start"] = time();
+            if (empty($errors)) {
+                $_SESSION["board"] = serialize($board_);
+                $_SESSION["game_state"] = "playing";
+                $_SESSION["time"]["start"] = time();
+            }
         }
 
         if ($_SESSION["game_state"] == "playing") {
@@ -150,6 +159,10 @@ class MemoryController extends BaseController
             'board' => $board,
             'time' => $time
         ];
+
+        if (!empty($errors)) {
+            $data["errors"] = $errors;
+        }
 
         $this->render('memory/index', $data);
     }

@@ -3,6 +3,10 @@
 // print_r($_SESSION);
 // br();
 // print_r($_POST);
+if (isset($errors)) {
+  error_handle($errors);
+}
+
 ?>
 
 <!-- Block démarrage du jeu -->
