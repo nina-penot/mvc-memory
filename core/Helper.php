@@ -306,7 +306,11 @@ function show_next_turn()
 
     <div>
         <div>Shame, try again.</div>
-        <button type="submit" name="next_turn">NEXT TURN</button>
+        <button style="margin-top: 20px;" class="nav_elem" type="submit" name="next_turn">
+            <span class="shadow"></span>
+            <span class="edge"></span>
+            <span class="front text"> NEXT TURN </span>
+        </button>
     </div>
 
 <?php }

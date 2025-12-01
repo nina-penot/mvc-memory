@@ -1,5 +1,5 @@
 <?php
-print_r($_SESSION["observer"]);
+// print_r($_SESSION["observer"]);
 // print_r($_SESSION);
 // br();
 // print_r($_POST);
@@ -56,7 +56,14 @@ print_r($_SESSION["observer"]);
     <?php }
     ?>
 
-    <button type="submit" name="start_game">START</button>
+    <div style="margin-top: 10px;">
+      <button class="nav_elem" type="submit" name="start_game">
+        <span class="shadow"></span>
+        <span class="edge"></span>
+        <span class="front text"> JOUER</span>
+      </button>
+    </div>
+
   </form>
 
 <?php } ?>
@@ -84,9 +91,12 @@ print_r($_SESSION["observer"]);
       <div class="interface_follow">
         <div>Coups : <?= $board->strikes ?></div>
 
-        <div style="display: inline-block;">
-          <div>Restart :</div>
-          <button type="submit" name="kill">RESTART</button>
+        <div style="margin-top: 10px;" style="display: inline-block;">
+          <button class="nav_elem2" type="submit" name="kill">
+            <span class="shadow"></span>
+            <span class="edge"></span>
+            <span class="front text"> RESTART </span>
+          </button>
         </div>
 
         <?php
@@ -108,17 +118,24 @@ print_r($_SESSION["observer"]);
 <?php if ($game_state == "over") { ?>
 
   <form method="post">
-
-    <div>Vous avez fini !</div>
-    <div>Votre score :</div>
-    <div>Jeu de <?= $board->pair_amount ?> paires en <?= $board->strikes ?> coups, en <?= clean_time($time) ?> !</.div>
+    <div class="score_table">
+      <div>Vous avez fini !</div>
+      <div>Votre score :</div>
+      <div>Jeu de <?= $board->pair_amount ?> paires en <?= $board->strikes ?> coups, en <?= clean_time($time) ?> !</div>
       <div>Score :</div>
       <div>BONUS DIFFICULTE : <?= $board->pair_amount ?> x 10 = <?= show_difficulty_bonus($board->pair_amount) ?></div>
       <div>MALUS COUPS : - <?= show_strikes_malus($board->strikes, $board->pair_amount) ?></div>
       <div>BONUS TEMPS : + <?= time_bonus_calc($time, $board->pair_amount) ?></div>
       <div>SCORE FINAL : <?= score_calc($board->pair_amount, $board->strikes, $time) ?> !</div>
-      <button type="submit" name="play_again">REJOUER</button>
+    </div>
 
+    <button class="nav_elem2" type="submit" name="play_again">
+      <span class="shadow"></span>
+      <span class="edge"></span>
+      <span class="front text"> REJOUER</span>
+    </button>
+
+    <!-- <button type="submit" name="play_again">REJOUER</button> -->
   </form>
 
 <?php } ?>

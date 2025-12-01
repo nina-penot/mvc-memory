@@ -1,4 +1,4 @@
-<div>Bienvenue sur le scoreboard !</div>
+<div style="display: inline-block;" class="score_table">Bienvenue sur le scoreboard !</div>
 
 <?php
 // print_r($topten);
@@ -10,7 +10,7 @@ if (is_logged_in()) {
 if (empty($topten)) { ?>
     <div>Il n'y a pas encore de scores !</div>
 <?php } else { ?>
-    <table>
+    <table class="score_table">
         <tr>
             <th>Utilisateur</th>
             <th>Score</th>

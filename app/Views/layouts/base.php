@@ -37,6 +37,13 @@
       </div>
     </div>
 
+    <div class="float_left gap_large" style="margin: 20px 50px 50px 50px;">
+      <div class="led_main led_red"></div>
+      <div class="led_main led_yellow"></div>
+      <div class="led_main led_green"></div>
+    </div>
+
+
 
   </header>
   <!-- Menu de navigation global -->
